@@ -4,7 +4,7 @@ import pandas as pd
 from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import os.path
-
+import base64
 
 #read css file
 with open('style.css') as f:
