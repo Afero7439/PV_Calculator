@@ -712,7 +712,7 @@ if calculate:
         create_table(table_data = materials_data,title='PV System Items',align_header='L', align_data='L', cell_width=[85,15,20,30,30],  emphasize_data=['0'], emphasize_style='BIU',emphasize_color=(255,0,0))
         pdf.cell(200, 6, txt="*Note: Small material costs are not presented here.", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         if checkbox:
-            pdf.output('Quotation for '+beneficiary+' - '+str(totalkWp)+'kWp.pdf', 'D')
+            pdf.output('Quotation for '+beneficiary+' - '+str(totalkWp)+'kWp.pdf')
 
 
 
