@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 import os.path
 
 
@@ -133,7 +134,7 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
 
     # add title
     if title != '':
-        pdf.multi_cell(0, line_height, title, border=0, align='j', ln=3, max_line_height=pdf.font_size)
+        pdf.multi_cell(0, line_height, title, border=0, align='j', new_x=XPos.LEFT, new_y=YPos.TOP, max_line_height=pdf.font_size)
         pdf.ln(line_height) # move cursor back to the left margin
 
     pdf.set_font(size=data_size)
@@ -148,7 +149,7 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
         if x_start:
             pdf.set_x(x_start)
         for datum in header:
-            pdf.multi_cell(col_width, line_height, datum, border=0, align=align_header, ln=3, max_line_height=pdf.font_size)
+            pdf.multi_cell(col_width, line_height, datum, border=0, align=align_header,  new_x=XPos.LEFT, new_y=YPos.TOP, max_line_height=pdf.font_size)
             x_right = pdf.get_x()
         pdf.ln(line_height) # move cursor back to the left margin
         y2 = pdf.get_y()
@@ -162,11 +163,11 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
                 if datum in emphasize_data:
                     pdf.set_text_color(*emphasize_color)
                     pdf.set_font(style=emphasize_style)
-                    pdf.multi_cell(col_width, line_height, datum, border=0, align=align_data, ln=3, max_line_height=pdf.font_size)
+                    pdf.multi_cell(col_width, line_height, datum, border=0, align=align_data,  new_x=XPos.LEFT, new_y=YPos.TOP, max_line_height=pdf.font_size)
                     pdf.set_text_color(0,0,0)
                     pdf.set_font(style=default_style)
                 else:
-                    pdf.multi_cell(col_width, line_height, datum, border=0, align=align_data, ln=3, max_line_height=pdf.font_size) # ln = 3 - move cursor to right with same vertical offset # this uses an object named pdf
+                    pdf.multi_cell(col_width, line_height, datum, border=0, align=align_data,  new_x=XPos.LEFT, new_y=YPos.TOP, max_line_height=pdf.font_size) # ln = 3 - move cursor to right with same vertical offset # this uses an object named pdf
             pdf.ln(line_height) # move cursor back to the left margin
     
     else:
@@ -174,7 +175,7 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
             pdf.set_x(x_start)
         for i in range(len(header)):
             datum = header[i]
-            pdf.multi_cell(col_width[i], line_height, datum, border=0, align=align_header, ln=3, max_line_height=pdf.font_size)
+            pdf.multi_cell(col_width[i], line_height, datum, border=0, align=align_header,  new_x=XPos.RIGHT, new_y=YPos.LAST, max_line_height=pdf.font_size)
             x_right = pdf.get_x()
         pdf.ln(line_height) # move cursor back to the left margin
         y2 = pdf.get_y()
@@ -194,11 +195,11 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
                 if datum in emphasize_data:
                     pdf.set_text_color(*emphasize_color)
                     pdf.set_font(style=emphasize_style)
-                    pdf.multi_cell(adjusted_col_width, line_height, datum, border=0, align=align_data, ln=3, max_line_height=pdf.font_size)
+                    pdf.multi_cell(adjusted_col_width, line_height, datum, border=0, align=align_data,  new_x=XPos.LEFT, new_y=YPos.TOP, max_line_height=pdf.font_size)
                     pdf.set_text_color(0,0,0)
                     pdf.set_font(style=default_style)
                 else:
-                    pdf.multi_cell(adjusted_col_width, line_height, datum, border=0, align=align_data, ln=3, max_line_height=pdf.font_size) # ln = 3 - move cursor to right with same vertical offset # this uses an object named pdf
+                    pdf.multi_cell(adjusted_col_width, line_height, datum, border=0, align=align_data,  new_x=XPos.RIGHT, new_y=YPos.LAST, max_line_height=pdf.font_size) # ln = 3 - move cursor to right with same vertical offset # this uses an object named pdf
             pdf.ln(line_height) # move cursor back to the left margin
     y3 = pdf.get_y()
     pdf.line(x_left,y3,x_right,y3)
@@ -641,21 +642,21 @@ if calculate:
         pdf.add_page()
         pdf.set_font("Times", size=10)
         pdf.image('logo.png', 10, 14, 40)
-        pdf.cell(200, 16, txt="", ln=1, align="L")
-        pdf.cell(200, 6, txt="M.A.R.S.T. S.A.", ln=1, align="L")
-        pdf.cell(200, 6, txt="Tg-Jiu, 210233, Romania", ln=1, align="L")
-        pdf.cell(200, 6, txt="Str. Termocentralei 2", ln=1, align="L")
+        pdf.cell(200, 16, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="M.A.R.S.T. S.A.", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Tg-Jiu, 210233, Romania", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Str. Termocentralei 2", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         pdf.set_font("Times", size=16)
-        pdf.cell(200, 6, txt="Quotation for " + str(totalkWp) + " kWp PV system", ln=1, align="C")
+        pdf.cell(200, 6, txt="Quotation for " + str(totalkWp) + " kWp PV system", new_x=XPos.LEFT, new_y=YPos.NEXT, align="C")
         pdf.set_font("Times", size=10)
-        pdf.cell(200, 6, txt="", ln=1, align="L")
-        pdf.cell(200, 6, txt="Date: "+ str(date), ln=1, align="L")
-        pdf.cell(200, 6, txt="Beneficiary: "+ beneficiary, ln=1, align="L")
-        pdf.cell(200, 6, txt="Address: "+ address, ln=1, align="L")
-        pdf.cell(200, 6, txt=connection_edit, ln=1, align="L")
-        pdf.cell(200, 6, txt="Available for 30 days", ln=1, align="L")
+        pdf.cell(200, 6, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Date: "+ str(date), new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Beneficiary: "+ beneficiary, new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Address: "+ address,new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt=connection_edit, new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Available for 30 days", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
 
-        pdf.cell(200, 6, txt="", ln=1, align="L")
+        pdf.cell(200, 6, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         create_table(table_data = calculation_data,title='PV System Items',align_header='L', align_data='L', cell_width=[85,15,40,40,],  emphasize_data=['0'], emphasize_style='BIU',emphasize_color=(255,0,0))
         
         total_data = {'Items': ['Total cost', 'VAT', 'Total cost with VAT'],
@@ -665,8 +666,8 @@ if calculate:
         st_expander1.table(calculation_df)
         st_expander1.table(total_df)
         create_table(table_data = total_data,title='PV System Total Costs',align_header='L', align_data='L', cell_width=[140,40,],  emphasize_data=['0','1000'], emphasize_style='BIU',emphasize_color=(255,0,0))    
-        pdf.cell(200,30, txt="", ln=1, align="L")
-        pdf.cell(200, 6, txt="Signature ________________________", ln=1, align="L")
+        pdf.cell(200,30, txt="",new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Signature ________________________", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
 
         
        
@@ -692,24 +693,24 @@ if calculate:
         pdf.add_page()
         pdf.set_font("Times", size=10)
         pdf.image('logo.png', 10, 14, 40)
-        pdf.cell(200, 16, txt="", ln=1, align="L")
-        pdf.cell(200, 6, txt="M.A.R.S.T. S.A.", ln=1, align="L")
-        pdf.cell(200, 6, txt="Tg-Jiu, 210233, Romania", ln=1, align="L")
-        pdf.cell(200, 6, txt="Str. Termocentralei 2", ln=1, align="L")
+        pdf.cell(200, 16, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="M.A.R.S.T. S.A.", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Tg-Jiu, 210233, Romania", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Str. Termocentralei 2", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         
-        pdf.cell(200, 6, txt="", ln=1, align="L")
-        pdf.cell(200, 6, txt="Date: "+ str(date), ln=1, align="L")
-        pdf.cell(200, 6, txt="Beneficiary: "+ beneficiary, ln=1, align="L")
-        pdf.cell(200, 6, txt="Address: "+ address, ln=1, align="L")
-        pdf.cell(200, 6, txt=connection_edit, ln=1, align="L")
-        pdf.cell(200, 6, txt="Available for 30 days", ln=1, align="L")
+        pdf.cell(200, 6, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Date: "+ str(date), new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Beneficiary: "+ beneficiary, new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Address: "+ address, new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt=connection_edit, new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Available for 30 days", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         pdf.set_font("Times", size=16)
-        pdf.cell(200, 6, txt="Equipment and materials  for a " + str(totalkWp) + " kWp PV system", ln=1, align="C")
+        pdf.cell(200, 6, txt="Equipment and materials  for a " + str(totalkWp) + " kWp PV system", new_x=XPos.LEFT, new_y=YPos.NEXT, align="C")
         pdf.set_font("Times", size=10)
-        pdf.cell(200, 6, txt="", ln=1, align="L")
-        pdf.cell(200, 6, txt="Resell percentage added: "+str(resell_price)+ ' %', ln=1, align="L")
+        pdf.cell(200, 6, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        pdf.cell(200, 6, txt="Resell percentage added: "+str(resell_price)+ ' %', new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         create_table(table_data = materials_data,title='PV System Items',align_header='L', align_data='L', cell_width=[85,15,20,30,30],  emphasize_data=['0'], emphasize_style='BIU',emphasize_color=(255,0,0))
-        pdf.cell(200, 6, txt="*Note: Small material costs are not presented here.", ln=1, align="L")
+        pdf.cell(200, 6, txt="*Note: Small material costs are not presented here.", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         if checkbox:
             pdf.output('Quotation for '+beneficiary+' - '+str(totalkWp)+'kWp.pdf', 'D')
 
@@ -787,7 +788,6 @@ if calculate:
 # fig, ax = plt.subplots()
 # ax.plot([1, 2, 3, 4], [1, 4, 9, 16])
 # st.pyplot(fig)
-
 
 
 
