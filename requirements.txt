@@ -1,3 +1,4 @@
 pandas==1.4.2
 streamlit==1.13.0
 fpdf==1.7.2
+fpdf2==2.5.7
