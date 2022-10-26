@@ -105,7 +105,7 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
     line_height = pdf.font_size * 2.5
 
     col_width = get_col_widths()
-    pdf.set_font(size=title_size)
+    pdf.set_font('Times',size=title_size)
 
     # Get starting position of x
     # Determin width of table to get x starting point for centred table
