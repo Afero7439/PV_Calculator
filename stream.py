@@ -5,6 +5,11 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 import os.path
 import base64
+import mysql.connector
+
+# Connect to MySQL
+
+
 
 #read css file
 with open('style.css') as f:
@@ -433,8 +438,7 @@ with navbar.expander("Exapand to add equipment to the database"):
 
 #nav buttons
 button1 = navbar.button("Save prices")
-if button1:
-    st.success("Prices saved")
+
 
 #calcualte panels power
 if panels :
@@ -471,8 +475,9 @@ load = round(load, 2)
 # power metrics
 col1, col2 = st.columns(2)
 col1.metric("Inverter", str(inverter_power) + "kW", str(overload)+"%")
+col1.write(str(inverters)+ " x "+type_inverter)
 col2.metric("Total PV power", str(totalkWp) + "kWp", str(round(inverter_power-totalkWp,2))+" kW")
-
+col2.write(str(panels)+ " x "+type_panels)
 #checkbox
 checkbox = st.checkbox("Print to PDF when calculating!")
 
@@ -480,6 +485,11 @@ checkbox = st.checkbox("Print to PDF when calculating!")
 #calculate costs
 calculate = st.button ("Calculate costs")
 st_expander1=st.expander("Calculation results")
+
+if button1:
+    st.success("Prices saved")
+
+
 #calculation results
 if calculate:
     

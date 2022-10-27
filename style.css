@@ -1,6 +1,6 @@
 div.css-keje6w.e1tzin5v2 {
     
-    border: 2px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
     padding: 5% 5% 5% 10%;
     border-radius: 5px;
     left: 0px;
@@ -9,7 +9,7 @@ div.css-keje6w.e1tzin5v2 {
 
 div.css-12ttj6m.epcbefy1{
     background-color: #fafafa;
-    border: 2px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
     padding: 5% 5% 5% 10%;
     border-radius: 5px;
 }
@@ -51,4 +51,12 @@ div.css-1fcdlhc.e1s6o5jp0{
 .css-swapoz.e16nr0p33{
     color: rgb(54, 54, 54);
     font-size: large;
+}
+
+
+.css-9s5bis {
+background-color: #ebebeb;
+}
+.css-1rs6os {
+background-color: #4e4e4e;
 }
