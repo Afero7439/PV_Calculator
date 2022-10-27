@@ -632,7 +632,7 @@ if calculate:
 
         calculation_data = {'Items': [type_panels, type_inverter, smart_meter, 'PV panel mounts','Assembly, Design, Commisioning', 'Auxiliary items','Grounding system'],
             'Qty': [panels, inverters, 1, panels,1, 1, gr_qty ],
-            'Unit price (EUR)': [pv_price * (resell_price+100)/100, inverter_price * inverter_power * (resell_price+100)/100 , smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , total_design_cost, aux_items_cost, grounding_system_cost],
+            'Unit price (EUR)': [pv_price * (resell_price+100)/100, round(inverter_price * inverter_power * (resell_price+100)/100,2 ), smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , total_design_cost, aux_items_cost, grounding_system_cost],
             'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost, total_design_cost, aux_items_cost, grounding_system_cost ],
             }
         
