@@ -433,8 +433,8 @@ with navbar.expander("Exapand to add equipment to the database"):
 
 #nav buttons
 button1 = navbar.button("Save prices")
-
-
+if button1:
+    st.success("Prices saved")
 
 #calcualte panels power
 if panels :
