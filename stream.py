@@ -384,6 +384,7 @@ with navbar.expander("Expand to see materials prices"):
     dcfuse_slot_price= st.number_input("Enter DC fuse slot price (€)", value=7.5, step=0.5)
     acbreaker_price= st.number_input("Enter AC breaker price (€)", value=50.0,step=0.5)
     ac_sm_breaker_price= st.number_input("Enter smart meter breaker price (€)", value=6.0,step=0.5)
+    vdc_power_supply_price= st.number_input("Enter 12VDC power supply price (€)", value=10.0,step=0.5)
     ftp_cable_price = st.number_input("Enter FTP cable price (€/m)", value=1.0, step=0.1)
     ground_cable_price = st.number_input("Enter grounding cable price (€/m)", value=3.0, step=0.1)
     solar_cable_price = st.number_input("Enter solar cable price (€/m)", value=2.0, step=0.1)
@@ -578,9 +579,18 @@ if calculate:
         #data maanger cost
         if need_data_manager:
             data_manager_cost = data_manager_price * (resell_price+100)/100
+            
+            if data_manager == "Internal board Data Manager":
+                vdc_ps_cost = 0
+            else:
+                vdc_ps_cost = vdc_power_supply_price * (resell_price+100)/100
+
         else:
             data_manager_cost = 0
-
+            vdc_ps_cost = 0
+        
+        power_supply= "12VDC Power Supply"
+    
 
         # PV panel mounts_______________________________________________________________________________________________________________________
         pvpanel_mounts_cost = pv_panel_mounts_price * panels * (resell_price+100)/100
@@ -633,7 +643,7 @@ if calculate:
         other_material_cost = other_mat_price * (resell_price+100)/100
         #st.write ("Other material cost: ", str(other_material_cost), "EUR")
 
-        aux_items_cost = ac_panel_total_cost+dc_panel_total_cost+total_cables_cost+other_material_cost
+        aux_items_cost = vdc_ps_cost+ac_panel_total_cost+dc_panel_total_cost+total_cables_cost+other_material_cost
         aux_items_cost = round(aux_items_cost,2)
         #st.write ("Auxiliary items cost: ", str(aux_items_cost), "EUR")
 
@@ -671,12 +681,18 @@ if calculate:
             }
         #drop last entry from dictionary
         if need_data_manager:
-            calculation_data = calculation_data
+            calculation_data=calculation_data
         else:
+          
             calculation_data['Items'].pop(-1)
             calculation_data['Qty'].pop(-1)
             calculation_data['Unit price (EUR)'].pop(-1)
             calculation_data['Total price (EUR)'].pop(-1)
+
+
+
+
+
 
         calculation_df = pd.DataFrame(calculation_data, columns = ['Items', 'Qty', 'Unit price (EUR)', 'Total price (EUR)'])
 
@@ -725,15 +741,25 @@ if calculate:
             st.subheader("List of materials")
             #st.write("Prices contain "+ str(resell_price) +" %" +" resell price.")
             resell= (resell_price+100)/100
-            materials_data = {'Items': [type_panels,type_inverter,smart_meter, 'PV panel mounts',"Solar cable", "Power Cable " + cable_type, "FTP cable", 'MYF 16','Corrugated tube', 'PV cable connectors', 'AC breaker', 'DC fuses', 'DC fuse slots', 'Discharger', 'AC panel', 'DC panel', 'MCB Smart meter 6A', data_manager],
-                    'Qty': [panels,inverters, 1, panels,l_inverter + 20, l_meter, l_meter, l_grounding,corrugated_tube_length, pv_cable_connector, inverters, strings*2, strings, strings, acpanel_qty, 1, 1,1],
-                    'Unit': ['pcs.','pcs.','pcs.','set','m', 'm', 'm', 'm', 'm', 'set', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.'],
-                    'Unit price (EUR)': [pv_price*resell, round(inverter_price * inverter_power * (resell_price+100)/100,2 ), smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , solar_cable_price*resell,power_cable_price*resell, ftp_cable_price*resell, round(ground_cable_price*resell,2), corrugated_tube_price*resell, connector_price*resell, acbreaker_price*resell, dcfuse_price*resell, dcfuse_slot_price*resell, discharger_price*resell, ac_electric_panel_price*resell, dc_electric_panel_price*resell, round(ac_sm_breaker_price*resell,2), data_manager_cost],
-                    'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost,pv_cable_cost,power_cable_cost,ftp_cable_cost,ground_cable_cost,corrugated_tube_cost,pv_connector_cost,acbreaker_cost*resell,dcbreaker_cost*resell,dc_fuse_slot_cost*resell,discharger_cost*resell,acpanel_cost*resell,dc_panel_cost*resell,round(mcb_smart_meter_cost*resell,2), data_manager_cost],
+            materials_data = {'Items': [type_panels,type_inverter,smart_meter, 'PV panel mounts',"Solar cable", "Power Cable " + cable_type, "FTP cable", 'MYF 16','Corrugated tube', 'PV cable connectors', 'AC breaker', 'DC fuses', 'DC fuse slots', 'Discharger', 'AC panel', 'DC panel', 'MCB Smart meter 6A', data_manager, power_supply],
+                    'Qty': [panels,inverters, 1, panels,l_inverter + 20, l_meter, l_meter, l_grounding,corrugated_tube_length, pv_cable_connector, inverters, strings*2, strings, strings, acpanel_qty, 1, 1,1,1],
+                    'Unit': ['pcs.','pcs.','pcs.','set','m', 'm', 'm', 'm', 'm', 'set', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.'],
+                    'Unit price (EUR)': [pv_price*resell, round(inverter_price * inverter_power * (resell_price+100)/100,2 ), smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , solar_cable_price*resell,power_cable_price*resell, ftp_cable_price*resell, round(ground_cable_price*resell,2), corrugated_tube_price*resell, connector_price*resell, acbreaker_price*resell, dcfuse_price*resell, dcfuse_slot_price*resell, discharger_price*resell, ac_electric_panel_price*resell, dc_electric_panel_price*resell, round(ac_sm_breaker_price*resell,2), data_manager_cost, vdc_ps_cost],
+                    'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost,pv_cable_cost,power_cable_cost,ftp_cable_cost,ground_cable_cost,corrugated_tube_cost,pv_connector_cost,acbreaker_cost*resell,dcbreaker_cost*resell,dc_fuse_slot_cost*resell,discharger_cost*resell,acpanel_cost*resell,dc_panel_cost*resell,round(mcb_smart_meter_cost*resell,2), data_manager_cost,vdc_ps_cost],
                     }
             if need_data_manager:
-                materials_data = materials_data
+                if data_manager == "Internal board Data Manager":
+                    materials_data['Items'].pop(-1)
+                    materials_data['Qty'].pop(-1)
+                    materials_data['Unit'].pop(-1)
+                    materials_data['Unit price (EUR)'].pop(-1)
+                    materials_data['Total price (EUR)'].pop(-1)
             else:
+                materials_data['Items'].pop(-2)
+                materials_data['Qty'].pop(-2)
+                materials_data['Unit'].pop(-2)
+                materials_data['Unit price (EUR)'].pop(-2)
+                materials_data['Total price (EUR)'].pop(-2)
                 materials_data['Items'].pop(-1)
                 materials_data['Qty'].pop(-1)
                 materials_data['Unit'].pop(-1)
