@@ -5,7 +5,7 @@ Haven't created a database yet so all equipment is predefined in the specific fi
 This is bad, since I can only add new equipment by changing those files and not from the interface.
 I have to use sql to manage my equipment but I would like to have a backup of that database so I won't lose it.
 
-The project help to calculate the necessary costs in order to build a PV system. These calculations are made with
+The project helps me to calculate the necessary costs in order to build a PV system. These calculations are made with
 costs that are used where I work ,so it might not be the cheapest.
 
 Cya!
