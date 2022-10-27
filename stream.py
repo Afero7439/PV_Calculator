@@ -210,7 +210,7 @@ def create_table(table_data, title='', data_size = 10, title_size=12, align_data
     pdf.line(x_left,y3,x_right,y3)
 
 #logo
-st.image("logo.png", width=150)
+#st.image("logo.png", width=150)
 
 #title page
 st.title("PV cost calculator")	
@@ -339,7 +339,7 @@ else:
 
 #sidebar
 navbar = st.sidebar
-navbar.image("logo.png", width=150)
+#navbar.image("logo.png", width=150)
 navbar.title("Prices")
 navbar.write("Set prices for equipment, transport, labor, materials and the app will calculate the costs for you")
 
