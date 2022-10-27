@@ -678,7 +678,7 @@ if calculate:
 
         with st.expander("Equipment and materials calculated"):
             st.subheader("List of materials")
-
+            st.write("Prices contain "+ str(resell_price) +" %" +" resell price")
             resell= (resell_price+100)/100
             materials_data = {'Items': [type_panels,type_inverter,smart_meter, 'PV panel mounts',"Solar cable", "Power Cable " + cable_type, "FTP cable", 'MYF 16','Corrugated tube', 'PV cable connectors', 'AC breaker', 'DC fuses', 'DC fuse slots', 'Discharger', 'AC panel', 'DC panel', 'MCB Smart meter 6A'],
                     'Qty': [panels,inverters, 1, panels,l_inverter + 20, l_meter, l_meter, l_grounding,corrugated_tube_length, pv_cable_connector, inverters, strings*2, strings, strings, acpanel_qty, 1, 1],
