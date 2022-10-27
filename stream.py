@@ -717,7 +717,7 @@ if calculate:
             def create_download_link(val, filename):
                 b64 = base64.b64encode(val)  # val looks like b'...'
                 return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download file</a>'
-            html = create_download_link(pdf.output(), 'Quotation for '+beneficiary+' - '+str(totalkWp)+'kWp.pdf')
+            html = create_download_link(pdf.output(), 'Quotation for '+beneficiary+' - '+str(totalkWp)+'kWp')
             st.markdown(html, unsafe_allow_html=True)
 
 
