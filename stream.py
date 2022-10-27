@@ -21,7 +21,8 @@ with open('style.css') as f:
     calculation_df = pd.DataFrame(columns=['Items', 'Qty', 'Unit price (€)', 'Total price (€)'])
     calculation_data = {}
     mounts_price_value = 60.0
-   
+    data_manager_price_value = 100.0
+    data_manager = "Yes"
 def create_table(table_data, title='', data_size = 10, title_size=12, align_data='L', align_header='L', cell_width='even', x_start='x_default',emphasize_data=[], emphasize_style=None, emphasize_color=(0,0,0)):
     """
     table_data: 
@@ -297,6 +298,9 @@ with st.expander("Project calculation parameters"):
     type_inverter = st.selectbox("Choose inverter", (inverter_stoc))
     inverters = st.number_input("Enter number of inverters (pcs.)", value=1, step=1)
     strings = st.number_input("Enter number of strings (pcs.)", value=2, step=1)
+    need_data_manager = st.checkbox("Do you need a data manager?")
+    if need_data_manager:
+        data_manager = st.selectbox("Choose data manager:", ("Internal board Data Manager","Electric panel Data Manager"))
     smart_meter = st.selectbox("Choose smart meter", (meter_stoc))
     pv_cable_connector = st.number_input("Enter number of solar cable connectors (set)", value=15, step=1)
     st.subheader("Electric materials")
@@ -343,6 +347,12 @@ if roofing_type == "Metal":
 else:
     mounts_price_value = 70.0
 
+if need_data_manager:
+    if data_manager == "Internal board Data Manager":
+        data_manager_price_value = 100.0
+    else:
+        data_manager_price_value = 150.0
+
 #sidebar
 navbar = st.sidebar
 #navbar.image("logo.png", width=150)
@@ -364,6 +374,7 @@ with navbar.expander("Expand to see equipment prices"):
     pv_price = st.number_input("Enter PV panel price (€)", value=150.0, step=10.0)
     inverter_price = st.number_input("Enter inverter price (€/kW)", value=375.0, step=5.0)
     pv_panel_mounts_price = st.number_input("Enter panel mounts price (€)", value=mounts_price_value, step=1.0)
+    data_manager_price = st.number_input("Enter data manager price (€)", value=data_manager_price_value, step=1.0)
     smart_meter_price = st.number_input("Enter smart meter price (€)", value = 300.0, step =0.5)
     smart_meter_ct_price = st.number_input("Enter smart meter current transformer price (€)", value = 20.0, step =0.5)
 #material prices
@@ -564,6 +575,12 @@ if calculate:
                         smartmeter_cost = 0
         
         #st.write ("Smart meter cost: ", str(smartmeter_cost), "EUR")
+        #data maanger cost
+        if need_data_manager:
+            data_manager_cost = data_manager_price * (resell_price+100)/100
+        else:
+            data_manager_cost = 0
+
 
         # PV panel mounts_______________________________________________________________________________________________________________________
         pvpanel_mounts_cost = pv_panel_mounts_price * panels * (resell_price+100)/100
@@ -624,13 +641,14 @@ if calculate:
         if grounding == "Yes":
             grounding_system_cost = (g_system + measure_g_system + g_system_labor) * (resell_price+100)/100
             gr_qty=1
+            grounding_item = "Grounding System"
             #st.write ("Grounding system cost: ", str(grounding_system_cost), "EUR")
         else:
-            grounding_system_cost = 0
-            gr_qty =0
-
+            grounding_system_cost = measure_g_system * (resell_price+100)/100
+            gr_qty = 1
+            grounding_item = "Grounding measurement"
         #total costs:_____________________________________________________________________________________________________________________________
-        total_cost = inverter_cost+pvpanel_cost + smartmeter_cost + pvpanel_mounts_cost + total_design_cost + ac_panel_total_cost + dc_panel_total_cost + total_cables_cost + other_material_cost + grounding_system_cost
+        total_cost = inverter_cost+pvpanel_cost + smartmeter_cost +data_manager_cost +pvpanel_mounts_cost + total_design_cost + ac_panel_total_cost + dc_panel_total_cost + total_cables_cost + other_material_cost + grounding_system_cost
         
         if discount>0.0:
             total_cost = total_cost - (total_cost * discount/100)
@@ -646,13 +664,24 @@ if calculate:
         vat_total_string =("Total cost with VAT: "+ str(vat_total_cost)+ " EUR")
         #st.header(vat_total_string)
 
-        calculation_data = {'Items': [type_panels, type_inverter, smart_meter, 'PV panel mounts','Assembly, Design, Commisioning', 'Auxiliary items','Grounding system'],
-            'Qty': [panels, inverters, 1, panels,1, 1, gr_qty ],
-            'Unit price (EUR)': [pv_price * (resell_price+100)/100, inverter_price * inverter_power * (resell_price+100)/100 , smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , total_design_cost, aux_items_cost, grounding_system_cost],
-            'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost, total_design_cost, aux_items_cost, grounding_system_cost ],
+        calculation_data = {'Items': [type_panels, type_inverter, smart_meter,'PV panel mounts','Assembly, Design, Commisioning', 'Auxiliary items',grounding_item,data_manager],
+            'Qty': [panels, inverters, 1,panels,1, 1, gr_qty,1 ],
+            'Unit price (EUR)': [pv_price * (resell_price+100)/100, round(inverter_price * inverter_power * (resell_price+100)/100,2 ), smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , total_design_cost, aux_items_cost, grounding_system_cost, data_manager_cost],
+            'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost, total_design_cost, aux_items_cost, grounding_system_cost, data_manager_cost ],
             }
-        
+        #drop last entry from dictionary
+        if need_data_manager:
+            calculation_data = calculation_data
+        else:
+            calculation_data['Items'].pop(-1)
+            calculation_data['Qty'].pop(-1)
+            calculation_data['Unit price (EUR)'].pop(-1)
+            calculation_data['Total price (EUR)'].pop(-1)
+
         calculation_df = pd.DataFrame(calculation_data, columns = ['Items', 'Qty', 'Unit price (EUR)', 'Total price (EUR)'])
+
+        
+        
 
         pdf = FPDF()
         pdf.add_page()
@@ -696,12 +725,22 @@ if calculate:
             st.subheader("List of materials")
             #st.write("Prices contain "+ str(resell_price) +" %" +" resell price.")
             resell= (resell_price+100)/100
-            materials_data = {'Items': [type_panels,type_inverter,smart_meter, 'PV panel mounts',"Solar cable", "Power Cable " + cable_type, "FTP cable", 'MYF 16','Corrugated tube', 'PV cable connectors', 'AC breaker', 'DC fuses', 'DC fuse slots', 'Discharger', 'AC panel', 'DC panel', 'MCB Smart meter 6A'],
-                    'Qty': [panels,inverters, 1, panels,l_inverter + 20, l_meter, l_meter, l_grounding,corrugated_tube_length, pv_cable_connector, inverters, strings*2, strings, strings, acpanel_qty, 1, 1],
-                    'Unit': ['pcs.','pcs.','pcs.','set','m', 'm', 'm', 'm', 'm', 'set', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.'],
-                    'Unit price (EUR)': [pv_price*resell,inverter_price * inverter_power * (resell_price+100)/100 , smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , solar_cable_price*resell,power_cable_price*resell, ftp_cable_price*resell, round(ground_cable_price*resell,2), corrugated_tube_price*resell, connector_price*resell, acbreaker_price*resell, dcfuse_price*resell, dcfuse_slot_price*resell, discharger_price*resell, ac_electric_panel_price*resell, dc_electric_panel_price*resell, round(ac_sm_breaker_price*resell,2)],
-                    'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost,pv_cable_cost,power_cable_cost,ftp_cable_cost,ground_cable_cost,corrugated_tube_cost,pv_connector_cost,acbreaker_cost*resell,dcbreaker_cost*resell,dc_fuse_slot_cost*resell,discharger_cost*resell,acpanel_cost*resell,dc_panel_cost*resell,round(mcb_smart_meter_cost*resell,2)],
+            materials_data = {'Items': [type_panels,type_inverter,smart_meter, 'PV panel mounts',"Solar cable", "Power Cable " + cable_type, "FTP cable", 'MYF 16','Corrugated tube', 'PV cable connectors', 'AC breaker', 'DC fuses', 'DC fuse slots', 'Discharger', 'AC panel', 'DC panel', 'MCB Smart meter 6A', data_manager],
+                    'Qty': [panels,inverters, 1, panels,l_inverter + 20, l_meter, l_meter, l_grounding,corrugated_tube_length, pv_cable_connector, inverters, strings*2, strings, strings, acpanel_qty, 1, 1,1],
+                    'Unit': ['pcs.','pcs.','pcs.','set','m', 'm', 'm', 'm', 'm', 'set', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.', 'pcs.'],
+                    'Unit price (EUR)': [pv_price*resell, round(inverter_price * inverter_power * (resell_price+100)/100,2 ), smartmeter_cost, pv_panel_mounts_price*(resell_price+100)/100 , solar_cable_price*resell,power_cable_price*resell, ftp_cable_price*resell, round(ground_cable_price*resell,2), corrugated_tube_price*resell, connector_price*resell, acbreaker_price*resell, dcfuse_price*resell, dcfuse_slot_price*resell, discharger_price*resell, ac_electric_panel_price*resell, dc_electric_panel_price*resell, round(ac_sm_breaker_price*resell,2), data_manager_cost],
+                    'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, pvpanel_mounts_cost,pv_cable_cost,power_cable_cost,ftp_cable_cost,ground_cable_cost,corrugated_tube_cost,pv_connector_cost,acbreaker_cost*resell,dcbreaker_cost*resell,dc_fuse_slot_cost*resell,discharger_cost*resell,acpanel_cost*resell,dc_panel_cost*resell,round(mcb_smart_meter_cost*resell,2), data_manager_cost],
                     }
+            if need_data_manager:
+                materials_data = materials_data
+            else:
+                materials_data['Items'].pop(-1)
+                materials_data['Qty'].pop(-1)
+                materials_data['Unit'].pop(-1)
+                materials_data['Unit price (EUR)'].pop(-1)
+                materials_data['Total price (EUR)'].pop(-1)
+
+
             materials_df = pd.DataFrame(materials_data, columns = ['Items','Unit', 'Qty', 'Unit price (EUR)', 'Total price (EUR)'])
             st.table(materials_df)
             st.write("*Note: Small material costs are not presented here.")
