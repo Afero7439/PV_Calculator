@@ -20,6 +20,7 @@ with open('style.css') as f:
     cable_type = "CYABY-F 5x6"
     calculation_df = pd.DataFrame(columns=['Items', 'Qty', 'Unit price (€)', 'Total price (€)'])
     calculation_data = {}
+    mounts_price_value = 60.0
    
 def create_table(table_data, title='', data_size = 10, title_size=12, align_data='L', align_header='L', cell_width='even', x_start='x_default',emphasize_data=[], emphasize_style=None, emphasize_color=(0,0,0)):
     """
@@ -306,6 +307,7 @@ with st.expander("Project calculation parameters"):
     acpanel = st.selectbox("New AC panel mounted? -If NO, you will use an existing AC panel.", ("Yes", "No"))
     st.subheader("Other information")
     pv_panel_spacing= st.number_input("Enter spacing between solar panel mounts (m)", value=0.8, step=0.1)
+    roofing_type = st.selectbox("What kind of roofing is it.", ("Metal", "Tiles"))
     distance_travel = st.number_input("Enter distance to transport (km)", value=600.0, step=10.0)
     # submit = st.form_submit_button("Submit")
     # if submit:
@@ -336,6 +338,10 @@ if inverter_power > 30:
 else:
     other_mat_value = 300.0
 
+if roofing_type == "Metal":
+    mounts_price_value = 60.0
+else:
+    mounts_price_value = 70.0
 
 #sidebar
 navbar = st.sidebar
@@ -357,8 +363,8 @@ header2=navbar.subheader("Equipment prices")
 with navbar.expander("Expand to see equipment prices"):
     pv_price = st.number_input("Enter PV panel price (€)", value=150.0, step=10.0)
     inverter_price = st.number_input("Enter inverter price (€/kW)", value=375.0, step=5.0)
-    pv_panel_mounts_price = st.number_input("Enter panel mounts price (€)", value=60.0, step=1.0)
-    smart_meter_price = st.number_input("Enter smart meter price (€/kW)", value = 62.5, step =0.5)
+    pv_panel_mounts_price = st.number_input("Enter panel mounts price (€)", value=mounts_price_value, step=1.0)
+    smart_meter_price = st.number_input("Enter smart meter price (€)", value = 300.0, step =0.5)
     smart_meter_ct_price = st.number_input("Enter smart meter current transformer price (€)", value = 20.0, step =0.5)
 #material prices
 header2=navbar.subheader("Materials prices")
@@ -544,7 +550,7 @@ if calculate:
             if smeter_df['product_name'][i] == smart_meter:
                 if smeter_df['connection'][i] == "indirect":
                     if inverters:
-                        smartmeter_cost = (inverter_power * smart_meter_price) * (resell_price+100)/100
+                        smartmeter_cost =  smart_meter_price * (resell_price+100)/100
                         if connection_el == "Three phase":
                             smartmeter_cost = smartmeter_cost + (smart_meter_ct_price*3 * (resell_price+100)/100)
                         else:
@@ -553,7 +559,7 @@ if calculate:
                         smartmeter_cost = 0
                 else:
                     if inverters:
-                        smartmeter_cost = inverter_power * smart_meter_price * (resell_price+100)/100
+                        smartmeter_cost = smart_meter_price * (resell_price+100)/100
                     else:
                         smartmeter_cost = 0
         
