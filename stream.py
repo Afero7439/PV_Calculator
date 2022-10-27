@@ -284,35 +284,39 @@ meter_stoc = smeter_df['product_name'].tolist()
 #streamlit form
 #with st.form("form1"):
 with st.expander("Project calculation parameters"):
-    st.subheader("Project declaration")
-    project = st.text_input("Enter project name", "Project name")
-    beneficiary = st.text_input("Enter beneficiary name", "Beneficiary name")	
-    address = st.text_input("Enter beneficiary address", "Beneficiary address")
-    date = st.date_input("Enter date of calculation")
-    st.subheader("Electric information")
-    system = st.selectbox("Select system type", ("On-grid", "Off-grid"))
-    connection_el = st.selectbox("Select connection type", ("Three phase", "Single phase"))
-    st.subheader("Equipment selection")
-    type_panels = st.selectbox("Choose panel type", (panouri_stoc))
-    panels = st.number_input("Enter number of panels (pcs.)", value=20,step=1)
-    type_inverter = st.selectbox("Choose inverter", (inverter_stoc))
-    inverters = st.number_input("Enter number of inverters (pcs.)", value=1, step=1)
-    strings = st.number_input("Enter number of strings (pcs.)", value=2, step=1)
-    need_data_manager = st.checkbox("Do you need a data manager?")
-    if need_data_manager:
-        data_manager = st.selectbox("Choose data manager:", ("Internal board Data Manager","Electric panel Data Manager"))
-    smart_meter = st.selectbox("Choose smart meter", (meter_stoc))
-    pv_cable_connector = st.number_input("Enter number of solar cable connectors (set)", value=15, step=1)
-    st.subheader("Electric materials")
-    grounding = st.selectbox("New grounding system?", ("Yes", "No"))
-    l_grounding= st.number_input("Length of cable to grounding system - from inverter to grounding (m)", value=15.0, step=1.0)
-    l_inverter = st.number_input("Length of cable from panels to inverter - solar cable (m) ", value=25.0, step=1.0)
-    l_meter = st.number_input("Length of cable from inverter to smart meter - FTP and power cables (m)", value=30.0, step=1.0)
-    acpanel = st.selectbox("New AC panel mounted? -If NO, you will use an existing AC panel.", ("Yes", "No"))
-    st.subheader("Other information")
-    pv_panel_spacing= st.number_input("Enter spacing between solar panel mounts (m)", value=0.8, step=0.1)
-    roofing_type = st.selectbox("What kind of roofing is it.", ("Metal", "Tiles"))
-    distance_travel = st.number_input("Enter distance to transport (km)", value=600.0, step=10.0)
+    tab1, tab2, tab3, tab4 = st.tabs(["Information", "Equipment", "Electric", "Other"])
+    with tab1:
+        st.subheader("Project declaration")
+        project = st.text_input("Enter project name", "Project name")
+        beneficiary = st.text_input("Enter beneficiary name", "Beneficiary name")	
+        address = st.text_input("Enter beneficiary address", "Beneficiary address")
+        date = st.date_input("Enter date of calculation")
+        system = st.selectbox("Select system type", ("On-grid", "Off-grid"))
+        connection_el = st.selectbox("Select connection type", ("Three phase", "Single phase"))
+    with tab2:
+        st.subheader("Equipment selection")
+        type_panels = st.selectbox("Choose panel type", (panouri_stoc))
+        panels = st.number_input("Enter number of panels (pcs.)", value=20,step=1)
+        type_inverter = st.selectbox("Choose inverter", (inverter_stoc))
+        inverters = st.number_input("Enter number of inverters (pcs.)", value=1, step=1)
+        strings = st.number_input("Enter number of strings (pcs.)", value=2, step=1)
+        need_data_manager = st.checkbox("Do you need a data manager?")
+        if need_data_manager:
+            data_manager = st.selectbox("Choose data manager:", ("Internal board Data Manager","Electric panel Data Manager"))
+        smart_meter = st.selectbox("Choose smart meter", (meter_stoc))
+        pv_cable_connector = st.number_input("Enter number of solar cable connectors (set)", value=15, step=1)
+    with tab3:
+        st.subheader("Electric materials")
+        grounding = st.selectbox("New grounding system?", ("Yes", "No"))
+        l_grounding= st.number_input("Length of cable to grounding system - from inverter to grounding (m)", value=15.0, step=1.0)
+        l_inverter = st.number_input("Length of cable from panels to inverter - solar cable (m) ", value=25.0, step=1.0)
+        l_meter = st.number_input("Length of cable from inverter to smart meter - FTP and power cables (m)", value=30.0, step=1.0)
+        acpanel = st.selectbox("New AC panel mounted? -If NO, you will use an existing AC panel.", ("Yes", "No"))
+    with tab4:
+        st.subheader("Other information")
+        pv_panel_spacing= st.number_input("Enter spacing between solar panel mounts (m)", value=0.8, step=0.1)
+        roofing_type = st.selectbox("What kind of roofing is it.", ("Metal", "Tiles"))
+        distance_travel = st.number_input("Enter distance to transport (km)", value=600.0, step=10.0)
     # submit = st.form_submit_button("Submit")
     # if submit:
     #     st.write("Saved project as:", type_panels, " Date is:", date)
@@ -801,6 +805,9 @@ if calculate:
                 return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download file</a>'
             html = create_download_link(pdf.output(), 'Quotation for '+beneficiary+' - '+str(totalkWp)+'kWp')
             st.markdown(html, unsafe_allow_html=True)
+
+
+
 
 
 # #button
