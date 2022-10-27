@@ -23,7 +23,6 @@ with open('style.css') as f:
     mounts_price_value = 60.0
     data_manager_price_value = 100.0
     data_manager = "Yes"
-    disable = False
 def create_table(table_data, title='', data_size = 10, title_size=12, align_data='L', align_header='L', cell_width='even', x_start='x_default',emphasize_data=[], emphasize_style=None, emphasize_color=(0,0,0)):
     """
     table_data: 
@@ -297,42 +296,16 @@ with st.expander("Project calculation parameters"):
     with tab2:
         
         st.subheader("Equipment selection")
-        colx, coly = st.columns([3,2])
-        with colx:
-            type_panels = st.selectbox("Choose panel type", (panouri_stoc))
-            panels = st.number_input("Enter number of panels (pcs.)", value=20,step=1)
-            type_inverter = st.selectbox("Choose inverter", (inverter_stoc))
-            inverters = st.number_input("Enter number of inverters (pcs.)", value=1, step=1)
-            strings = st.number_input("Enter number of strings (pcs.)", value=2, step=1)
-            need_data_manager = st.checkbox("Do you need a data manager?")
-            if need_data_manager:
-                data_manager = st.selectbox("Choose data manager:", ("Internal board Data Manager","Electric panel Data Manager"))
-            smart_meter = st.selectbox("Choose smart meter", (meter_stoc))
-            
-        with coly:
-            pv_price = st.number_input("Enter PV panel price (€)", value=150.0, step=10.0)
-            total_pvprice = pv_price*panels
-            total_panels_display_price=st.number_input("Total PV panel price (€)", value=total_pvprice, step=10.0, disabled=True)
-            inverter_price = st.number_input("Enter inverter price (€/kW)", value=375.0, step=5.0)
-            for i in range(len(inverter_df)):
-                if inverter_df['product_name'][i] == type_inverter:
-                    inverter_power = inverter_df['power'][i]
-            total_inverterprice = inverter_price*inverters*inverter_power
-            total_inverter_display_price=st.number_input("Total inverter price (€)", value=total_inverterprice, step=10.0, disabled=True)
-            st.write("##")
-            st.write("##")
-            st.write("##")
-            st.write("##")
-            if need_data_manager:
-                if data_manager == "Internal board Data Manager":
-                    data_manager_price_value = 100.0
-                else:
-                    data_manager_price_value = 150.0
-            if need_data_manager:
-                data_manager_price = st.number_input("Enter data manager price (€)", value=data_manager_price_value, step=1.0)
-            smart_meter_price = st.number_input("Enter smart meter price (€)", value = 300.0, step =0.5)
-
-
+        type_panels = st.selectbox("Choose panel type", (panouri_stoc))
+        panels = st.number_input("Enter number of panels (pcs.)", value=20,step=1)
+        type_inverter = st.selectbox("Choose inverter", (inverter_stoc))
+        inverters = st.number_input("Enter number of inverters (pcs.)", value=1, step=1)
+        strings = st.number_input("Enter number of strings (pcs.)", value=2, step=1)
+        need_data_manager = st.checkbox("Do you need a data manager?")
+        if need_data_manager:
+            data_manager = st.selectbox("Choose data manager:", ("Internal board Data Manager","Electric panel Data Manager"))
+        smart_meter = st.selectbox("Choose smart meter", (meter_stoc))
+        pv_cable_connector = st.number_input("Enter number of solar cable connectors (set)", value=15, step=1)
     with tab3:
         st.subheader("Electric materials")
         grounding = st.selectbox("New grounding system?", ("Yes", "No"))
@@ -340,7 +313,6 @@ with st.expander("Project calculation parameters"):
         l_inverter = st.number_input("Length of cable from panels to inverter - solar cable (m) ", value=25.0, step=1.0)
         l_meter = st.number_input("Length of cable from inverter to smart meter - FTP and power cables (m)", value=30.0, step=1.0)
         acpanel = st.selectbox("New AC panel mounted? -If NO, you will use an existing AC panel.", ("Yes", "No"))
-        pv_cable_connector = st.number_input("Enter number of solar cable connectors (set)", value=15, step=1)
     with tab4:
         st.subheader("Other information")
         pv_panel_spacing= st.number_input("Enter spacing between solar panel mounts (m)", value=0.8, step=0.1)
@@ -380,7 +352,11 @@ if roofing_type == "Metal":
 else:
     mounts_price_value = 70.0
 
-
+if need_data_manager:
+    if data_manager == "Internal board Data Manager":
+        data_manager_price_value = 100.0
+    else:
+        data_manager_price_value = 150.0
 
 #sidebar
 navbar = st.sidebar
@@ -400,7 +376,11 @@ with navbar.expander("Expand to see Design, Transport, Assembly, Commisioning pr
 #equipment prices
 header2=navbar.subheader("Equipment prices")
 with navbar.expander("Expand to see equipment prices"):
+    pv_price = st.number_input("Enter PV panel price (€)", value=150.0, step=10.0)
+    inverter_price = st.number_input("Enter inverter price (€/kW)", value=375.0, step=5.0)
     pv_panel_mounts_price = st.number_input("Enter panel mounts price (€)", value=mounts_price_value, step=1.0)
+    data_manager_price = st.number_input("Enter data manager price (€)", value=data_manager_price_value, step=1.0)
+    smart_meter_price = st.number_input("Enter smart meter price (€)", value = 300.0, step =0.5)
     smart_meter_ct_price = st.number_input("Enter smart meter current transformer price (€)", value = 20.0, step =0.5)
 #material prices
 header2=navbar.subheader("Materials prices")
