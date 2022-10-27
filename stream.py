@@ -324,6 +324,11 @@ with st.expander("Project calculation parameters"):
             st.write("##")
             st.write("##")
             if need_data_manager:
+                if data_manager == "Internal board Data Manager":
+                    data_manager_price_value = 100.0
+                else:
+                    data_manager_price_value = 150.0
+            if need_data_manager:
                 data_manager_price = st.number_input("Enter data manager price (€)", value=data_manager_price_value, step=1.0)
             smart_meter_price = st.number_input("Enter smart meter price (€)", value = 300.0, step =0.5)
 
@@ -375,11 +380,7 @@ if roofing_type == "Metal":
 else:
     mounts_price_value = 70.0
 
-if need_data_manager:
-    if data_manager == "Internal board Data Manager":
-        data_manager_price_value = 100.0
-    else:
-        data_manager_price_value = 150.0
+
 
 #sidebar
 navbar = st.sidebar
