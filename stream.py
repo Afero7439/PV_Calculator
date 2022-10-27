@@ -724,8 +724,8 @@ if calculate:
             'Prices (EUR)': [total_cost, vat_cost, vat_total_cost],}
         total_df = pd.DataFrame(total_data, columns = ['Items','Prices (EUR)'])
         total_df.hide_columns= True
-        st_expander1.table(calculation_df)
-        st_expander1.table(total_df)
+        st_expander1.table(calculation_df.style.format({"Qty": "{:.2f}","Unit price (EUR)": "{:.2f}","Total price (EUR)": "{:.2f}" }))
+        st_expander1.table(total_df.style.format({"Prices (EUR)": "{:.2f}" }))
         create_table(table_data = total_data,title='PV System Total Costs',align_header='L', align_data='L', cell_width=[140,40,],  emphasize_data=['0','1000'], emphasize_style='BIU',emphasize_color=(255,0,0))    
         pdf.cell(200,30, txt="",new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         pdf.cell(200, 6, txt="Signature ________________________", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
@@ -768,7 +768,8 @@ if calculate:
 
 
             materials_df = pd.DataFrame(materials_data, columns = ['Items','Unit', 'Qty', 'Unit price (EUR)', 'Total price (EUR)'])
-            st.table(materials_df)
+            st.table(materials_df.style.format({"Qty": "{:.2f}","Unit price (EUR)": "{:.2f}","Total price (EUR)": "{:.2f}" }))
+            
             st.write("*Note: Small material costs are not presented here.")
 
         pdf.add_page()
