@@ -688,7 +688,7 @@ if calculate:
 
         with st.expander("Equipment and materials calculated"):
             st.subheader("List of materials")
-            st.write("Prices contain "+ str(resell_price) +" %" +" resell price.")
+            #st.write("Prices contain "+ str(resell_price) +" %" +" resell price.")
             resell= (resell_price+100)/100
             materials_data = {'Items': [type_panels,type_inverter,smart_meter, 'PV panel mounts',"Solar cable", "Power Cable " + cable_type, "FTP cable", 'MYF 16','Corrugated tube', 'PV cable connectors', 'AC breaker', 'DC fuses', 'DC fuse slots', 'Discharger', 'AC panel', 'DC panel', 'MCB Smart meter 6A'],
                     'Qty': [panels,inverters, 1, panels,l_inverter + 20, l_meter, l_meter, l_grounding,corrugated_tube_length, pv_cable_connector, inverters, strings*2, strings, strings, acpanel_qty, 1, 1],
@@ -718,7 +718,7 @@ if calculate:
         pdf.cell(200, 6, txt="Equipment and materials  for a " + str(totalkWp) + " kWp PV system", new_x=XPos.LEFT, new_y=YPos.NEXT, align="C")
         pdf.set_font("Times", size=10)
         pdf.cell(200, 6, txt="", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
-        pdf.cell(200, 6, txt="Resell percentage added: "+str(resell_price)+ ' %', new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
+        #pdf.cell(200, 6, txt="Resell percentage added: "+str(resell_price)+ ' %', new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         create_table(table_data = materials_data,title='PV System Items',align_header='L', align_data='L', cell_width=[85,15,20,30,30],  emphasize_data=['0'], emphasize_style='BIU',emphasize_color=(255,0,0))
         pdf.cell(200, 6, txt="*Note: Small material costs are not presented here.", new_x=XPos.LEFT, new_y=YPos.NEXT, align="L")
         if checkbox:
