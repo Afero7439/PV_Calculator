@@ -354,9 +354,9 @@ else:
 
 if need_data_manager:
     if data_manager == "Internal board Data Manager":
-        data_manager_price_value = 100.0
-    else:
         data_manager_price_value = 150.0
+    else:
+        data_manager_price_value = 200.0
 
 #sidebar
 navbar = st.sidebar
