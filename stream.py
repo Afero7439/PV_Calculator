@@ -21,7 +21,7 @@ with open('style.css') as f:
     calculation_df = pd.DataFrame(columns=['Items', 'Qty', 'Unit price (€)', 'Total price (€)'])
     calculation_data = {}
     mounts_price_value = 60.0
-    data_manager_price_value = 100.0
+    data_manager_price_value = 150.0
     data_manager = "Yes"
 def create_table(table_data, title='', data_size = 10, title_size=12, align_data='L', align_header='L', cell_width='even', x_start='x_default',emphasize_data=[], emphasize_style=None, emphasize_color=(0,0,0)):
     """
