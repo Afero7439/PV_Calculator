@@ -1008,7 +1008,7 @@ with st.expander("Project calculation parameters"):
 
         plm1,plm2,plm3,plm4,plm5 = st.columns(5)
         with plm1:
-            roofing_type = st.selectbox("What kind of roofing is it?", ("Metal sandwich", "Metal sheet","Tiles", "Flat"))
+            roofing_type = st.selectbox("What kind of roofing is it?", ("Tiles","Metal sandwich", "Metal sheet", "Flat"))
             if roofing_type == "Metal sandwich":
                 mounts_price_value = 60.0
             else:
