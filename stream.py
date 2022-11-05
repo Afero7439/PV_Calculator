@@ -1047,44 +1047,88 @@ with st.expander("Project calculation parameters"):
         with plm5:
             prespace = st.number_input("Rail before/after group (cm) ", value=30, step=1, help= "Lenght of rail before and after the group of panels.")
        
-        rotation=st.checkbox("Rotated panels", value=False, key="rotated_panels")
+        rotation=st.checkbox("Rotate panels", value=False, key="rotate_panels")
+        image_rotation=st.checkbox("Rotate roof", value=False, key="rotate_roof" , help="Rotate roof image to match the real roof. Doesn't change calculations.")
         #create arays of solar panels
-        if roofing_type =="Tiles":
-            style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
-            <style>
-            .css-1e38a0u.e1tzin5v2{
-                background-image: url("	https://www.the3rdsequence.com/texturedb/thumbnail/161/512/roof+tiles.jpg");
-                background-size: 80px;
-                border-radius: 5px;
-            }
-            </style>""", unsafe_allow_html=True)
-        elif roofing_type =="Metal sheet":
-            style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
-            <style>
-            .css-1e38a0u.e1tzin5v2{
-                background-image: url("https://s3.amazonaws.com/texturemax_th/metal/corrugated-metal/corrugated-metal_0001_01_thr.jpg");
-                background-size: 250px;
-                border-radius: 5px;
-            }
-            </style>""", unsafe_allow_html=True)
-        elif roofing_type =="Metal sandwich":
-            style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
-            <style>
-            .css-1e38a0u.e1tzin5v2{
-                background-image: url("https://i.pinimg.com/originals/60/26/d0/6026d00ed91fa4dd73d0922de954e485.jpg");
-                background-size: 70px;
-                border-radius: 5px;
-            }
-            </style>""", unsafe_allow_html=True)
-        elif roofing_type =="Flat":
-            style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
-            <style>
-            .css-1e38a0u.e1tzin5v2{
-                background-image: url("https://thumbs.dreamstime.com/b/texture-grey-flat-roofing-slate-close-up-140963645.jpg");
-                background-size: 160px;
-                border-radius: 5px;
-            }
-            </style>""", unsafe_allow_html=True)
+
+        # background image for panels layout
+        if image_rotation:
+            if roofing_type =="Tiles":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://i.postimg.cc/52XmXdsm/roof-tiles-r.png");
+                    background-size: 80px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+            elif roofing_type =="Metal sheet":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://i.postimg.cc/cCYrphhw/sheet-r.jpg");
+                    background-size: 250px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+            elif roofing_type =="Metal sandwich":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://i.postimg.cc/nLvSLfLP/sandwich-r.jpg");
+                    background-size: 70px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+            elif roofing_type =="Flat":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://thumbs.dreamstime.com/b/texture-grey-flat-roofing-slate-close-up-140963645.jpg");
+                    background-size: 160px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+        else:
+            if roofing_type =="Tiles":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("	https://www.the3rdsequence.com/texturedb/thumbnail/161/512/roof+tiles.jpg");
+                    background-size: 80px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+            elif roofing_type =="Metal sheet":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://s3.amazonaws.com/texturemax_th/metal/corrugated-metal/corrugated-metal_0001_01_thr.jpg");
+                    background-size: 250px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+            elif roofing_type =="Metal sandwich":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://i.pinimg.com/originals/60/26/d0/6026d00ed91fa4dd73d0922de954e485.jpg");
+                    background-size: 70px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+            elif roofing_type =="Flat":
+                style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
+                <style>
+                .css-1e38a0u.e1tzin5v2{
+                    background-image: url("https://thumbs.dreamstime.com/b/texture-grey-flat-roofing-slate-close-up-140963645.jpg");
+                    background-size: 160px;
+                    border-radius: 5px;
+                }
+                </style>""", unsafe_allow_html=True)
+
+
+
         
         if rotation:
             style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
@@ -1227,8 +1271,8 @@ with st.expander("Project calculation parameters"):
         with gf5:
             mounts_tprice= st.text_input("Total price", total_mounts * pv_panel_mounts_price *resell,  key = "mounts_tprice",disabled=True)
             if roofing_type != "Flat":
-                end_clamp_tprice= st.text_input("Total price", end_clamp_qty * end_clamp_price *resell,  key = "end_clamp_tprice",disabled=True, label_visibility="hidden")
-                mid_clamp_tprice= st.text_input("Total price", mid_clamp_qty * mid_clamp_price *resell,  key = "mid_clamp_tprice",disabled=True, label_visibility="hidden")
+                end_clamp_tprice= st.text_input("Total price", round(end_clamp_qty * end_clamp_price *resell,2),  key = "end_clamp_tprice",disabled=True, label_visibility="hidden")
+                mid_clamp_tprice= st.text_input("Total price", round(mid_clamp_qty * mid_clamp_price *resell,2),  key = "mid_clamp_tprice",disabled=True, label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
                     screw_tprice= st.text_input("Total price", round(screw_qty * screw_price *resell,2),  key = "screw_tprice",disabled=True, label_visibility="hidden")
         tt1, = st.columns(1)
