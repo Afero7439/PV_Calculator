@@ -76,6 +76,7 @@ if 'panels_count2' not in st.session_state:
 	st.session_state.panels_count2 = 20
 if 'total_costs' not in st.session_state:
 	st.session_state.total_costs = 0
+
 def create_table(table_data, title='', data_size = 10, title_size=12, align_data='L', align_header='L', cell_width='even', x_start='x_default',emphasize_data=[], emphasize_style=None, emphasize_color=(0,0,0)):
     """
     table_data: 
@@ -1057,6 +1058,7 @@ with st.expander("Project calculation parameters"):
                 style = st.markdown(f'<p style=" padding-top:34px; font-size:22px; text-align:center; display:none; ">{"x"}</p>'"""
                 <style>
                 .css-1e38a0u.e1tzin5v2{
+
                     background-image: url("https://i.postimg.cc/52XmXdsm/roof-tiles-r.png");
                     background-size: 80px;
                     border-radius: 5px;
@@ -1171,6 +1173,7 @@ with st.expander("Project calculation parameters"):
         for i in range(groups):
             if i!=0:
                 st.write("#")
+            
                 
             test1,test2,test3,test4 = st.columns([0.8,0.3,0.8,12.1])
             with test1:
@@ -1197,7 +1200,15 @@ with st.expander("Project calculation parameters"):
         total_mid_clamp_qty = 0   
         rail_length_total = 0  
         railholder_total = 0
-
+        end_clamp_qty = 0
+        mid_clamp_qty = 0
+        end_clamp_price = 0
+        mid_clamp_price = 0
+        rail_length = 0
+        railholder = 0
+        screw_qty = 0
+        screw_price = 0
+        panels_set_total = 0
         if rotation and orientation == "Horizontal":
             width_panel=1722
         elif rotation and orientation == "Vertical":
@@ -1223,10 +1234,16 @@ with st.expander("Project calculation parameters"):
                 railholder = (rail_length)/(pv_panel_spacing * 1000) + 2
                 railholder_total += railholder  
             rail_length_total += rail_length
-        
+            panels_set=rows_c*columns_c
+            panels_set_total += panels_set
         #st.write("Rail length: "+str(rail_length_total/1000)+" m")
       
-
+        if panels_set_total > panels:
+            st.error("You have distributed "+str(panels_set_total - panels)+" panel(s) over the "+ str(panels)+" panels number!")
+        elif panels_set_total < panels:
+            st.warning ("You have "+str(panels - panels_set_total)+" panel(s) left to distribute!")
+        else:
+            st.success("You have distributed all the panels!")
         total_mounts = total_mid_clamp_qty+total_end_clamp_qty
         if roofing_type == "Flat":
             total_mounts = panels
@@ -1235,13 +1252,13 @@ with st.expander("Project calculation parameters"):
             mounts_price_value = 18.5
         gf1,gf2,gf3,gf4,gf5 = st.columns([2.5,1,1,1,1])
         with gf1:
-            mounts_type= st.text_input("Type of mounts", panel_mount_type,disabled=True)
+            mounts_type= st.text_input("Type of mounts", panel_mount_type,disabled=True, help= ("Flat roof mounts will take the number of panels as quantity"))
             if roofing_type != "Flat":
                 end_clamp_type= st.text_input("End Clamps", "Aluminium clamp",disabled=True)
                 mid_clamp_type= st.text_input("Mid Clamps", "Aluminium clamp",disabled=True)
                 if roofing_type != "Metal sandwich" :
                     if roofing_type == "Tiles":
-                        screw_type= st.text_input("Tiles mount: ", "Tile hook", key="tile_hook", disabled= True)
+                        screw_type= st.text_input("Tile mounts: ", "Tile hook", key="tile_hook", disabled= True)
                     else:
                         screw_type= st.selectbox("Screw type", ("M8 X 200", "M8 X 100", "M8 X 150", "M8 X 250",), key="screw_type")
         with gf2:
@@ -1269,14 +1286,14 @@ with st.expander("Project calculation parameters"):
                 if roofing_type != "Metal sandwich" :
                     screw_uprice= st.text_input("Unit price (€)", value=screw_price*resell, disabled=True, key = "screw_uprice", label_visibility="hidden")
         with gf5:
-            mounts_tprice= st.text_input("Total price", total_mounts * pv_panel_mounts_price *resell,  key = "mounts_tprice",disabled=True)
+            mounts_tprice= st.text_input("Total price", mounts_qty * pv_panel_mounts_price *resell,  key = "mounts_tprice",disabled=True)
             if roofing_type != "Flat":
                 end_clamp_tprice= st.text_input("Total price", round(end_clamp_qty * end_clamp_price *resell,2),  key = "end_clamp_tprice",disabled=True, label_visibility="hidden")
                 mid_clamp_tprice= st.text_input("Total price", round(mid_clamp_qty * mid_clamp_price *resell,2),  key = "mid_clamp_tprice",disabled=True, label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
                     screw_tprice= st.text_input("Total price", round(screw_qty * screw_price *resell,2),  key = "screw_tprice",disabled=True, label_visibility="hidden")
         tt1, = st.columns(1)
-        total_cost_mounts_value = total_mounts * pv_panel_mounts_price *resell
+        total_cost_mounts_value = mounts_qty * pv_panel_mounts_price *resell + end_clamp_qty * end_clamp_price *resell + mid_clamp_qty * mid_clamp_price *resell + screw_qty * screw_price *resell
         with tt1:
             st.text_input("empty", value="", key="total_cost_mounts",label_visibility="hidden", disabled=True)
             total_costs_mounts = st.write(f'<p style=" margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Costs: " + str(total_cost_mounts_value) + " EUR"}</p>', unsafe_allow_html=True)
@@ -1455,7 +1472,7 @@ with navbar:
             result_df.to_csv(filename3)
             st.success("Smart Meter added to the database")
     else:
-        st.warning("Please enter equipment name!")
+        st.warning("Please enter the equipment name!")
     st.caption ("*Equipment name must be unique and should reflect the characteristics of the equipment. For example: 'ABB 3P+N+PE 5kW'")
 
 for i in range(len(pvpanel_df)):
