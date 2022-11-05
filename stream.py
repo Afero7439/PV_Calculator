@@ -1125,7 +1125,8 @@ with st.expander("Project calculation parameters"):
         solar_images = solar_img*panels*2   
 
         for i in range(groups):
-            #st.write("#")
+            if i!=0:
+                st.write("#")
                 
             test1,test2,test3,test4 = st.columns([0.8,0.3,0.8,12.1])
             with test1:
