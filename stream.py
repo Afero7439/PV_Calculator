@@ -1209,6 +1209,8 @@ with st.expander("Project calculation parameters"):
         screw_qty = 0
         screw_price = 0
         panels_set_total = 0
+        sheet_mount_price = 0
+        sheet_mount_tprice = 0
         if rotation and orientation == "Horizontal":
             width_panel=1722
         elif rotation and orientation == "Vertical":
@@ -1260,7 +1262,8 @@ with st.expander("Project calculation parameters"):
                     if roofing_type == "Tiles":
                         screw_type= st.text_input("Tile mounts: ", "Tile hook", key="tile_hook", disabled= True)
                     else:
-                        screw_type= st.selectbox("Screw type", ("M8 X 200", "M8 X 100", "M8 X 150", "M8 X 250",), key="screw_type")
+                        screw_type= st.selectbox("Screw type for mounts", ("M8 X 200", "M8 X 100", "M8 X 150", "M8 X 250",), key="screw_type")
+                        sheet_mount_type = st.text_input("Sheet mounts: ", "Metal sheet roof mount ", key="sheet_hook", disabled= True)
         with gf2:
             mounts_qty= st.number_input("Qty.", value=total_mounts, step=1)
             if roofing_type != "Flat":
@@ -1268,6 +1271,8 @@ with st.expander("Project calculation parameters"):
                 mid_clamp_qty= st.number_input("Qty.", value=total_mid_clamp_qty, step=1, key="mid_clamp_qty", label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
                     screw_qty= st.number_input("Qty.", value=int(round(railholder_total,0)), step=1, key="screw_qty", label_visibility="hidden")
+                if roofing_type == "Metal sheet":
+                    sheet_mount_qty = st.number_input("Qty.", value=int(round(railholder_total,0)), step=1, key="sheet_mount_qty", label_visibility="hidden")
         with gf3:
             pv_panel_mounts_price= st.number_input("Buy price (€)", value=mounts_price_value, step=1.0, key="pv_panel_mounts_price" )
             if roofing_type != "Flat":
@@ -1278,6 +1283,8 @@ with st.expander("Project calculation parameters"):
                         screw_price= st.number_input("Buy price (€)", value=7.5, step=0.1, key="screw_price", label_visibility="hidden")
                     else:
                         screw_price= st.number_input("Buy price (€)", value=0.5, step=0.1, key="screw_price", label_visibility="hidden")
+                    if roofing_type == "Metal sheet":
+                        sheet_mount_price = st.number_input("Buy price (€)", value=5.0, step=0.1, key="sheet_mount_price", label_visibility="hidden")
         with gf4:
             mounts_uprice= st.text_input("Unit price (€)", value=pv_panel_mounts_price*resell, disabled=True, key = "mounts_uprice")
             if roofing_type != "Flat":
@@ -1285,6 +1292,8 @@ with st.expander("Project calculation parameters"):
                 mid_clamp_uprice= st.text_input("Unit price (€)", value=mid_clamp_price*resell, disabled=True, key = "mid_clamp_uprice", label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
                     screw_uprice= st.text_input("Unit price (€)", value=screw_price*resell, disabled=True, key = "screw_uprice", label_visibility="hidden")
+                if roofing_type == "Metal sheet":
+                    sheet_mount_uprice = st.text_input("Unit price (€)", value=sheet_mount_price*resell, disabled=True, key = "sheet_mount_uprice", label_visibility="hidden")
         with gf5:
             mounts_tprice= st.text_input("Total price", mounts_qty * pv_panel_mounts_price *resell,  key = "mounts_tprice",disabled=True)
             if roofing_type != "Flat":
@@ -1292,11 +1301,16 @@ with st.expander("Project calculation parameters"):
                 mid_clamp_tprice= st.text_input("Total price", round(mid_clamp_qty * mid_clamp_price *resell,2),  key = "mid_clamp_tprice",disabled=True, label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
                     screw_tprice= st.text_input("Total price", round(screw_qty * screw_price *resell,2),  key = "screw_tprice",disabled=True, label_visibility="hidden")
+                if roofing_type == "Metal sheet":
+                    sheet_mount_tprice = st.text_input("Total price", round(sheet_mount_qty * sheet_mount_price *resell,2),  key = "sheet_mount_tprice",disabled=True, label_visibility="hidden")
         tt1, = st.columns(1)
-        total_cost_mounts_value = mounts_qty * pv_panel_mounts_price *resell + end_clamp_qty * end_clamp_price *resell + mid_clamp_qty * mid_clamp_price *resell + screw_qty * screw_price *resell
+        total_cost_mounts_value =float(sheet_mount_tprice)+ mounts_qty * pv_panel_mounts_price *resell + end_clamp_qty * end_clamp_price *resell + mid_clamp_qty * mid_clamp_price *resell + screw_qty * screw_price *resell
         with tt1:
             st.text_input("empty", value="", key="total_cost_mounts",label_visibility="hidden", disabled=True)
-            total_costs_mounts = st.write(f'<p style=" margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Costs: " + str(total_cost_mounts_value) + " EUR"}</p>', unsafe_allow_html=True)
+            total_costs_mounts = st.write(f'<p style=" margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Costs: " + str(round(total_cost_mounts_value,2)) + " EUR"}</p>', unsafe_allow_html=True)
+
+        
+        
 
 #_______________________________________________________________________________________________________________________________        
     with tab8:
@@ -1330,7 +1344,23 @@ with st.expander("Project calculation parameters"):
         with u1:
             st.text_input("empty", value="", key="total_cost_oth",label_visibility="hidden", disabled=True)
             total_costs_gr = st.write(f'<p style="margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Costs: " + str(total_cost_oth_value) + " EUR"}</p>', unsafe_allow_html=True)
-
+if total_cost_mounts_value >0:
+    expander_1=st.expander("Mounts description", expanded=False)
+    with expander_1:
+        description1, description2,des1 = st.columns([2,2,0.01])
+        with description1:
+            st.image("sheet-mounts.jpg", width=600)
+        with description2:
+            st.write("Sheet mounts are used to mount the PV panels on metal sheets. They are used on metal sheet roofs.")
+            st.write("They are made of galvanized steel and are available in different sizes.")
+            
+        st.markdown("___")
+        description3, description4,des2 = st.columns([2,2,0.01])
+        with description3:
+            st.image("tile-mounts.jpg", width=600)
+        with description4:
+            st.write("Tile mounts are used to mount the PV panels on tile roofs. They are made of galvanized steel and are available in different sizes.")
+            
 tt1, = st.columns(1)
         
 with tt1:
