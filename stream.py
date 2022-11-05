@@ -1162,10 +1162,10 @@ with st.expander("Project calculation parameters"):
             </style>""", unsafe_allow_html=True)
             width_value=40
             if orientation == "Horizontal":
-                solar_img = ["solar-h.png",]
+                solar_img = ["solar-h.png",] 
             else:
                 solar_img = ["solar-v.png",]
-                
+           
         solar_images = solar_img*panels*2   
 
         for i in range(groups):
