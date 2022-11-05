@@ -1,3 +1,18 @@
+.css-12oz5g7{
+    max-width: 1320px !important;
+    padding: 2rem 1rem 10rem !important;
+}
+
+.css-10trblm {
+    text-align: center;
+}
+.css-1fv8s86 p{
+font-size: large;
+}
+
+h1{
+    padding: 1.25rem 0px 1.2rem !important;
+}
 div.css-keje6w.e1tzin5v2 {
     
     border: 1px solid #CCCCCC;
@@ -5,6 +20,7 @@ div.css-keje6w.e1tzin5v2 {
     border-radius: 5px;
     left: 0px;
     width: 100%;
+  
 }
 
 div.css-12ttj6m.epcbefy1{
@@ -22,15 +38,32 @@ div.css-1a32fsj.e19lei0e0 {
     margin-top: 0px;
     
 }
-div.css-1kyxreq.etr89bj2{
-    width: 200px !important;
+
+
+.css-5uatcg.edgvbvh10{
+    width:100%;
+}
+.css-z09lfk.edgvbvh10{
+    width:100%;
+}
+.css-1x8cf1d.edgvbvh10{
+    width:100%;
+}
+.css-629wbf.edgvbvh10{
+    width:100%;
 }
 .css-6kekos{
     width:100%;
 }
 .css-1uqmt5j{
     width:100%;
+    
 }
+
+.css-1o1rr3x{
+    width:38px;
+}
+
 .css-16u8z0w{
     width:100%;
     margin-bottom: 20px;
@@ -66,10 +99,13 @@ background-color: #4e4e4e;
 .st-gp{
     font-weight: 600;
 }
-.st-gi {
-    -webkit-text-fill-color: rgb(0 0 0);
-}
+
 
 .css-j0nf8i{
     color: rgb(49 51 63) !important;
 }
+
+.css-729dqf{
+    color: rgb(255 255 255)!important;
+}
+
