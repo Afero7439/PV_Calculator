@@ -1406,7 +1406,7 @@ if total_cost_mounts_value >0:
         with description1:
             st.image("sheet-mounts.jpg", width=600)
         with description2:
-            st.subheader("Sheet mounts")
+            st.subheader("Metal sheet roofing mounts")
             st.write("Sheet mounts are used to mount the PV panels on metal sheets. They are used on metal sheet roofs.")
             st.write("They are made of galvanized steel and are available in different sizes.")
             
@@ -1415,7 +1415,7 @@ if total_cost_mounts_value >0:
         with description3:
             st.image("tile-mounts.jpg", width=600)
         with description4:
-            st.subheader("Tile mounts")
+            st.subheader("Tile roofing mounts")
             st.write("Tile mounts are used to mount the PV panels on tile roofs. They are made of galvanized steel and are available in different sizes.")
             
 tt1, = st.columns(1)
