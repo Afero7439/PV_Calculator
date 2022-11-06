@@ -41,7 +41,9 @@ with open('style.css') as f:
     gr_cable_lines=1
     sl_cable_lines=1
     sm_tc_qty=0
-
+    platbanda_qty = 0
+    separator_qty =0
+    electrode_qty = 0
     total_grnew = [0.0,0.0,0.0]
     unit_grnew = [0.0,0.0,0.0]
     total_slnew = [0.0,0.0,0.0]
@@ -987,18 +989,70 @@ with st.expander("Project calculation parameters"):
 #_______________________________________________________________________________________________________________________________    
     with tab6:
         st.subheader("Grounding system")
+        labor_gr_tprice =0.0
+        platbanda_total_price=0.0
+        electrode_total_price=0.0
+        separator_total_price=0.0
+        small_material_gr_tprice=0.0
         need_grounding_system = st.checkbox("Do you need a grounding system?")
+        f1,f2,f3,f4,f5 = st.columns([2.5,1,1,1,1])
+        with f1:
+            measure_type = st.text_input ("Ohm measurement" , "Grounding system measurement", disabled=True)
+            if need_grounding_system:
+                platbanda_type= st.selectbox("OL-ZN Strip", ("40x4", "40x2"))
+                electrode_type= st.selectbox("Grounding Electrode", ("1.5m", "2.0m", "2.5m", "3.0m"))
+                separator_type= st.text_input("Separator", ("Grounding separator"), disabled=True)
+                small_material_gr = st.text_input("Small material", "Grounding system small material", disabled=True, key="small_material_gr")
+                labor_total_price_gr = st.text_input("Labor", "Grounding system labor", disabled=True, key="labor_total_price_gr")
+        with f2:
+            measure_qty = st.number_input("Qty. (pcs)", value=1, step=1, key="measure_qty")
+            if need_grounding_system:
+                platbanda_qty = st.number_input("Qty. (m)", value=20, step=1)
+                electrode_qty = st.number_input("Qty. (pcs)", value=5, step=1)
+                separator_qty = st.number_input("Qty. (pcs)", value=1, step=1)
+                small_material_gr_qty = st.number_input("Qty. (pcs)", value=1, step=1, key="small_material_gr_qty")
+                labor_gr_qty = st.number_input("Qty. (pcs)", value=1, step=1, key="labor_gr_qty")
+        with f3:
+            measure_g_system = st.number_input("Price", value=100.0, step=10.0)
+            if need_grounding_system:
+                platbanda_price= st.number_input("Buy price", value=2.0, step=0.5, key = "platbanda_price")
+                electrode_price= st.number_input("Buy price", value=9.0, step=0.5, key = "electrode_price")
+                separator_price= st.number_input("Buy price", value=12.0, step=0.5, key = "separator_price")
+                small_material_gr_price = st.number_input("Buy Price", value=100.0, step=10.0, key="small_material_gr_price")
+                labor_gr_price = st.number_input("Price", value=1100.0, step=10.0, key="labor_gr_price")
+        with f4:
+            measure_g_system_uprice = st.text_input("Unit price", value=round(measure_g_system*resell,2), disabled=True, label_visibility="hidden",key="measure_g_system_uprice")
+            if need_grounding_system:
+                platbanda_uuprice= round(platbanda_price*resell,2)
+                platbanda_uprice= st.text_input("Unit price", platbanda_uuprice,  key = "platbanda_uprice",disabled=True)
+                electrode_uuprice= round(electrode_price*resell,2)
+                electrode_uprice= st.text_input("Unit price", electrode_uuprice,  key = "electrode_uprice",disabled=True)
+                separator_uuprice= round(separator_price*resell,2)
+                separator_uprice= st.text_input("Unit price", separator_uuprice,  key = "separator_uprice",disabled=True)
+                small_material_gr_uprice = st.text_input("Unit price", value=round(small_material_gr_price*resell,2), disabled=True, label_visibility="hidden",key="small_material_gr_uprice")
+                labor_gr_uprice = st.text_input("Unit price", value=round(labor_gr_price*resell,2), disabled=True, label_visibility="hidden",key="labor_gr_uprice")
+        with f5:
+            measure_g_system_tprice = st.text_input("Total price", value=round(measure_g_system*resell*measure_qty,2), disabled=True, label_visibility="hidden",key="measure_g_system_tprice")
+            if need_grounding_system:
+                platbanda_total_price = round(float(platbanda_uprice) * platbanda_qty,2)
+                platbanda_tprice= st.text_input("Total price", platbanda_total_price,  key = "platbanda_tprice",disabled=True)
+                electrode_total_price = round(float(electrode_uprice) * electrode_qty,2)
+                electrode_tprice= st.text_input("Total price", electrode_total_price,  key = "electrode_tprice",disabled=True)
+                separator_total_price = round(separator_uuprice * separator_qty,2)
+                separator_tprice= st.text_input("Total price", separator_total_price,  key = "separator_tprice",disabled=True)
+                small_material_gr_tprice = st.text_input("Total price", value=round(small_material_gr_price*resell*small_material_gr_qty,2), disabled=True, label_visibility="hidden",key="small_material_gr_tprice")
+                labor_gr_tprice = st.text_input("Total price", value=round(labor_gr_price*resell*labor_gr_qty,2), disabled=True, label_visibility="hidden",key="labor_gr_tprice")
+            
+        
         if need_grounding_system:
             grounding = "Yes"
-            g_system = st.number_input("Enter grounding system total materials prices (€)", value=515.0, step=10.0)
-            g_system_labor = st.number_input("Enter grounding system labor and equipment renting price (€)", value=1405.0, step=10.0)
         else:
             grounding = "No"
         
-        measure_g_system = st.number_input("Enter grounding system measurement price (€)", value=100.0, step=10.0)
+        
 
         t1, = st.columns(1)
-        total_cost_gr_value = measure_g_system*resell + g_system_labor +g_system
+        total_cost_gr_value = float(measure_g_system_tprice) + float(labor_gr_tprice) + (platbanda_total_price+electrode_total_price+separator_total_price+float(small_material_gr_tprice))
         with t1:
             st.text_input("empty", value="", key="total_cost_gr",label_visibility="hidden", disabled=True)
             total_costs_gr = st.write(f'<p style=" margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Costs: " + str(total_cost_gr_value) + " EUR"}</p>', unsafe_allow_html=True)
@@ -1211,6 +1265,7 @@ with st.expander("Project calculation parameters"):
         panels_set_total = 0
         sheet_mount_price = 0
         sheet_mount_tprice = 0
+        sheet_mount_qty=0
         if rotation and orientation == "Horizontal":
             width_panel=1722
         elif rotation and orientation == "Vertical":
@@ -1351,6 +1406,7 @@ if total_cost_mounts_value >0:
         with description1:
             st.image("sheet-mounts.jpg", width=600)
         with description2:
+            st.subheader("Sheet mounts")
             st.write("Sheet mounts are used to mount the PV panels on metal sheets. They are used on metal sheet roofs.")
             st.write("They are made of galvanized steel and are available in different sizes.")
             
@@ -1359,6 +1415,7 @@ if total_cost_mounts_value >0:
         with description3:
             st.image("tile-mounts.jpg", width=600)
         with description4:
+            st.subheader("Tile mounts")
             st.write("Tile mounts are used to mount the PV panels on tile roofs. They are made of galvanized steel and are available in different sizes.")
             
 tt1, = st.columns(1)
@@ -1366,7 +1423,7 @@ tt1, = st.columns(1)
 with tt1:
     tt_value = total_cost_eq_value+ total_cost_oth_value+total_cost_mounts_value+total_cost_gr_value+total_cost_DC_value+total_cost_AC_value + total_cost_design_value + total_cost_cables_value       
     st.text_input("empty", value="", key="total_cost_tt",label_visibility="hidden", disabled=True)
-    total_costs_gr = st.write(f'<p style="color:rgb(9, 171, 59);  margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Project Total: " + str(tt_value) + " EUR"}</p>', unsafe_allow_html=True)
+    total_costs_gr = st.write(f'<p style="color:rgb(9, 171, 59);  margin-top: -58px; padding-top:4px; padding-bottom:4px;font-size:22px;border-radius:4px; text-align:right; padding-right:60px;">{"Project Total: " + str(round(tt_value,2)) + " EUR"}</p>', unsafe_allow_html=True)
 if grounding == "Yes":
     gr_qty=1
     grounding_item = "Grounding System"
@@ -1402,13 +1459,15 @@ if need_data_manager:
 else:
     data_manager_cost = 0
     vdc_ps_cost = 0
+if panel_mount_type == "3.3 m rail  ":
+    panel_mount_type = "Long Rail  "
 other_material_cost = other_mat_price*resell*other_material_qty        
 aux_items_cost = vdc_ps_cost+total_cost_AC_value+total_cost_DC_value+total_cost_cables_value+other_material_cost
 aux_items_cost = round(aux_items_cost,2)
-calculation_data2 = {'Items': [type_panels, type_inverter, smart_meter,panel_mount_type +' PV panel mounts','Assembly, Design, Commisioning', 'Auxiliary items',grounding_item,data_manager],
-    'Qty': [panels, inverters, 1,mounts_qty,1, 1, gr_qty,1 ],
-    'Seller Price': [o_pv_price, o_inverter_price, o_smart_meter_price, pv_panel_mounts_price, total_cost_design_value/resell, aux_items_cost/resell, round(total_cost_gr_value/resell,2), data_manager_cost],
-    'Unit price (EUR)': [pv_price_resell, inverter_price_resell, smartmeter_cost, pv_panel_mounts_price*resell, total_cost_design_value, aux_items_cost,total_cost_gr_value, data_manager_cost],
+calculation_data2 = {'Items': [type_panels, type_inverter, smart_meter, panel_mount_type +' PV panel mounts','Assembly, Design, Commisioning', 'Auxiliary items',grounding_item,data_manager],
+    'Qty': [panels, inverters, 1,panels,1, 1, gr_qty,1 ],
+    'Seller Price': [o_pv_price, o_inverter_price, o_smart_meter_price, round(total_cost_mounts_value/resell/panels,2), total_cost_design_value/resell, aux_items_cost/resell, round(total_cost_gr_value/resell,2), data_manager_cost],
+    'Unit price (EUR)': [pv_price_resell, inverter_price_resell, smartmeter_cost, round(total_cost_mounts_value/panels,2), total_cost_design_value, aux_items_cost,total_cost_gr_value, data_manager_cost],
     'Total price (EUR)': [t_pv_total_value_resell, t_inverter_price_resell, smartmeter_cost, total_cost_mounts_value, total_cost_design_value, aux_items_cost, total_cost_gr_value, data_manager_cost ],
     }
 
@@ -1674,8 +1733,8 @@ if calculate:
         #st.header(vat_total_string)
 
         calculation_data = {'Items': [type_panels, type_inverter, smart_meter,panel_mount_type +' PV panel mounts','Assembly, Design, Commisioning', 'Auxiliary items',grounding_item,data_manager],
-            'Qty': [panels, inverters, 1,mounts_qty,1, 1, gr_qty,1 ],
-            'Unit price (EUR)': [pv_price_resell, inverter_price_resell, smartmeter_cost, pv_panel_mounts_price*resell, total_cost_design_value, aux_items_cost, grounding_system_cost, data_manager_cost],
+            'Qty': [panels, inverters, 1,panels,1, 1, gr_qty,1 ],
+            'Unit price (EUR)': [pv_price_resell, inverter_price_resell, smartmeter_cost, round(total_cost_mounts_value/panels,2), total_cost_design_value, aux_items_cost, grounding_system_cost, data_manager_cost],
             'Total price (EUR)': [pvpanel_cost, inverter_cost, smartmeter_cost, total_cost_mounts_value, total_cost_design_value, aux_items_cost, grounding_system_cost, data_manager_cost ],
             }
         #drop last entry from dictionary
@@ -1885,6 +1944,56 @@ if calculate:
                     materials_data['Unit'].append(dcpanel_data['Unit'][0])
                     materials_data['Unit price (EUR)'].append(dcpanel_data['Unit price (EUR)'][0])
                     materials_data['Total price (EUR)'].append(dcpanel_data['Total price (EUR)'][0])
+
+            if sheet_mount_qty>0:
+                materials_data['Items'].append(sheet_mount_type)
+                materials_data['Qty'].append(sheet_mount_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(sheet_mount_uprice) )
+                materials_data['Total price (EUR)'].append(float(sheet_mount_tprice))
+            if screw_qty>0:
+                materials_data['Items'].append(screw_type + " screws")
+                materials_data['Qty'].append(screw_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(screw_uprice) )
+                materials_data['Total price (EUR)'].append(float(screw_tprice))
+            if end_clamp_qty>0:
+                materials_data['Items'].append("End "+end_clamp_type)
+                materials_data['Qty'].append(end_clamp_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(end_clamp_uprice) )
+                materials_data['Total price (EUR)'].append(float(end_clamp_tprice))
+            if mid_clamp_qty>0:
+                materials_data['Items'].append("Mid "+ mid_clamp_type)
+                materials_data['Qty'].append(mid_clamp_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(mid_clamp_uprice) )
+                materials_data['Total price (EUR)'].append(float(mid_clamp_tprice))
+            if mounts_qty>0:
+                materials_data['Items'].append(mounts_type)
+                materials_data['Qty'].append(mounts_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(mounts_uprice) )
+                materials_data['Total price (EUR)'].append(float(mounts_tprice))
+            if platbanda_qty >0:
+                materials_data['Items'].append(platbanda_type + " OL-ZN strip")
+                materials_data['Qty'].append(platbanda_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(platbanda_uprice) )
+                materials_data['Total price (EUR)'].append(float(platbanda_tprice))
+            if separator_qty>0:
+                materials_data['Items'].append(separator_type)
+                materials_data['Qty'].append(separator_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(separator_uprice) )
+                materials_data['Total price (EUR)'].append(float(separator_tprice))
+            if electrode_qty>0:
+                materials_data['Items'].append(electrode_type + " OL-ZN electrode")
+                materials_data['Qty'].append(electrode_qty)
+                materials_data['Unit'].append("pcs.")
+                materials_data['Unit price (EUR)'].append(float(electrode_uprice) )
+                materials_data['Total price (EUR)'].append(float(electrode_tprice))
+
 
             if st.session_state.acmcb_count>1:
                 for x in range(1, st.session_state.acmcb_count):
