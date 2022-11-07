@@ -1402,13 +1402,39 @@ with st.expander("Project calculation parameters"):
 if total_cost_mounts_value >0:
     expander_1=st.expander("Mounts description", expanded=False)
     with expander_1:
+        description5, description6,des3 = st.columns([2,2,0.01])
+        with description5:
+            st.image("mini-rail.png", width=600)
+        with description6:
+            st.subheader("Mini rail mounts")
+            st.write("Mini rail mounts are used for mounting the PV panels on corrugated or ondulated panel roofs. They are mounted on two waves that are less than 40 cm appart. ")
+            st.write("Materials used in this case are:")
+            st.write(" - mini rails that come with the necessary screws")
+            st.write(" - end clamps")
+            st.write(" - mid clamps")
+        st.markdown("___")
+        description7, description8,des4 = st.columns([2,2,0.01])
+        with description7:
+            st.image("micro-rail.png", width=600)
+        with description8:
+            st.subheader("Micro rail mounts")
+            st.write("Microrail mounts are used for mounting the PV panels on corrugated or ondulated panel roofs where the distance between the waves is higher the 40cm. ")
+            st.write("Materials used in this case are:")
+            st.write(" - micro rails that come with the necessary screws")
+            st.write(" - end clamps")
+            st.write(" - mid clamps")    
+        st.markdown("___")
         description1, description2,des1 = st.columns([2,2,0.01])
         with description1:
             st.image("sheet-mounts.jpg", width=600)
         with description2:
             st.subheader("Metal sheet roofing mounts")
-            st.write("Sheet mounts are used to mount the PV panels on metal sheets. They are used on metal sheet roofs.")
-            st.write("They are made of galvanized steel and are available in different sizes.")
+            st.write("Sheet mounts are used to mount the PV panels on metal sheets. ")
+            st.write("Materials used in this case are:")
+            st.write(" - 3.3m rails")
+            st.write(" - end clamps")
+            st.write(" - mid clamps")
+            st.write(" - wood screws with waterproofing seals")
             
         st.markdown("___")
         description3, description4,des2 = st.columns([2,2,0.01])
@@ -1416,8 +1442,12 @@ if total_cost_mounts_value >0:
             st.image("tile-mounts.jpg", width=600)
         with description4:
             st.subheader("Tile roofing mounts")
-            st.write("Tile mounts are used to mount the PV panels on tile roofs. They are made of galvanized steel and are available in different sizes.")
-            
+            st.write("Tile mounts are used to mount the PV panels on tile roofs. They are made of galvanized steel and are made to be mounted between the tiles and the roof.")
+            st.write("Materials used in this case are:")
+            st.write(" - 3.3m rails")
+            st.write(" - end clamps")
+            st.write(" - mid clamps")
+            st.write(" - tile mounts that come with the necessary screws")
 tt1, = st.columns(1)
         
 with tt1:
@@ -1484,7 +1514,7 @@ else:
 
 calculation_df2 = pd.DataFrame(calculation_data2, columns = ['Items', 'Qty','Seller Price','Unit price (EUR)', 'Total price (EUR)'])
 
-st.table (calculation_df2)
+st.table (calculation_df2.style.format({"Qty": "{:.2f}","Seller Price": "{:.2f}","Unit price (EUR)": "{:.2f}","Total price (EUR)": "{:.2f}" }))
 
 #conditionals |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
