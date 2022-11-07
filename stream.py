@@ -1060,7 +1060,7 @@ with st.expander("Project calculation parameters"):
     
     with tab7:
         st.subheader("PV panel mounting system")
-
+        st.write("Distribute the PV panels into groups.")
         plm1,plm2,plm3,plm4,plm5 = st.columns(5)
         with plm1:
             roofing_type = st.selectbox("What kind of roofing is it?", ("Tiles","Metal sandwich", "Metal sheet", "Flat"))
