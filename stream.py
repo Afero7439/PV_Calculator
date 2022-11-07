@@ -1982,7 +1982,10 @@ if calculate:
                 materials_data['Unit price (EUR)'].append(float(sheet_mount_uprice) )
                 materials_data['Total price (EUR)'].append(float(sheet_mount_tprice))
             if screw_qty>0:
-                materials_data['Items'].append(screw_type + " screws")
+                if screw_type == "Tile hook":
+                    materials_data['Items'].append(screw_type + " mounts")
+                else:
+                    materials_data['Items'].append(screw_type + " screws")
                 materials_data['Qty'].append(screw_qty)
                 materials_data['Unit'].append("pcs.")
                 materials_data['Unit price (EUR)'].append(float(screw_uprice) )
