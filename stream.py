@@ -349,13 +349,13 @@ with st.expander("Project calculation parameters"):
             design_price = st.number_input("Price. (€) ", value=design_price_value, step=10.0)
             commissioning_price = st.number_input("Price (€)", value=500.0, step=10.0)
         with dtac4:
-            transport_up = st.text_input("Unit Price (€/km)", round(transport_price*resell,2), disabled = True, key="transport_up")
+            transport_up = st.text_input("Unit Price", round(transport_price*resell,2), disabled = True, key="transport_up")
             direct_pv_labor_u = direct_pvpanel_labor * resell
             indirect_pv_labor_u = indirect_pvpanel_labor_percentage/100 * direct_pvpanel_labor  * resell
             pv_labor_u = direct_pv_labor_u + indirect_pv_labor_u
             pv_labor_u = st.text_input("Unit Price (€/panel)",round(pv_labor_u,2), disabled=True, key="pv_labor_u")
-            design_u = st.text_input("Unit Price (€)", round(design_price*resell,2), disabled=True, key="design_u")
-            commissioning_u = st.text_input("Unit Price (€)", round(commissioning_price*resell,2), disabled=True, key="commissioning_u")
+            design_u = st.text_input("Unit Price", round(design_price*resell,2), disabled=True, key="design_u", label_visibility="hidden")
+            commissioning_u = st.text_input("Unit Price", round(commissioning_price*resell,2), disabled=True, key="commissioning_u", label_visibility="hidden")
         with dtac5:
             if 'panels' not in st.session_state: 
                 number_of_panels =  st.session_state.panels_count
@@ -365,10 +365,10 @@ with st.expander("Project calculation parameters"):
             direct_pv_labor = direct_pvpanel_labor * resell * number_of_panels
             indirect_pv_labor = indirect_pvpanel_labor_percentage/100 * direct_pvpanel_labor * number_of_panels * resell
             pv_labor = direct_pv_labor + indirect_pv_labor
-            transport_tp = st.text_input("Total Price (€)", round(float(transport_up) *distance_travel,2), disabled = True, key="transport_tp")
-            pv_labor_tcost = st.text_input("Total cost (€)", pv_labor, disabled=True)
-            design_t = st.text_input("Total price (€)", round(design_price*resell,2), disabled=True, key="design_t")
-            commissioning_t = st.text_input("Total price (€)", round(commissioning_price*resell,2), disabled=True, key="commissioning_t")
+            transport_tp = st.text_input("Total Price", round(float(transport_up) *distance_travel,2), disabled = True, key="transport_tp")
+            pv_labor_tcost = st.text_input("Total price (€)", pv_labor, disabled=True, label_visibility="hidden")
+            design_t = st.text_input("Total price (€)", round(design_price*resell,2), disabled=True, key="design_t", label_visibility="hidden")
+            commissioning_t = st.text_input("Total price (€)", round(commissioning_price*resell,2), disabled=True, key="commissioning_t", label_visibility="hidden")
         dtacs1, = st.columns(1)
         total_cost_design_value = design_price*resell + commissioning_price*resell + pv_labor + float(transport_tp)
         with dtacs1:
@@ -395,57 +395,57 @@ with st.expander("Project calculation parameters"):
            
             
         with c2:
-            panels = st.number_input("Panels Qty.", value=st.session_state.panels_count,step=1, key="panels")	
+            panels = st.number_input("Qty.", value=st.session_state.panels_count,step=1, key="panels")	
             
-            inverters = st.number_input("Inverters Qty.", value=1, step=1)
-            q_smart_meter = st.number_input("Meter Qty.", value=1, step=1)
+            inverters = st.number_input("Inverters Qty.", value=1, step=1, label_visibility="hidden")
+            q_smart_meter = st.number_input("Meter Qty.", value=1, step=1, label_visibility="hidden")
             if sm_connetion=="indirect":
                 if connection_el == "Three phase":	
                     q_sm_tc_qty = 3
                 else:
                     q_sm_tc_qty = 1
-                sm_tc_qty = st.number_input("CT Qty.", value=q_sm_tc_qty,step=1)
+                sm_tc_qty = st.number_input("CT Qty.", value=q_sm_tc_qty,step=1, label_visibility="hidden")
             if need_data_manager:
-                q_data_manager = st.number_input("Data Manager Qty.", value=1, step=1)
+                q_data_manager = st.number_input("Data Manager Qty.", value=1, step=1, label_visibility="hidden")
 
         with c3:
-            o_pv_price = st.number_input("Panels Sell Price €/pc.", value=150.0, step=10.0)
-            o_inverter_price = st.number_input("Inverter Sell Price €/kW", value=375.0, step=5.0)
-            o_smart_meter_price = st.number_input("Mater Sell Price €/pc.", value = 300.0, step =0.5)
+            o_pv_price = st.number_input("Buy Price", value=150.0, step=10.0)
+            o_inverter_price = st.number_input("Inverter Buy Price €/kW", value=375.0, step=5.0)
+            o_smart_meter_price = st.number_input("Mater Sell Price €/pc.", value = 300.0, step =0.5, label_visibility="hidden")
             if sm_connetion=="indirect":
-                smart_meter_ct_price = st.number_input("CT Sell Price €/pc. ", value = 20.0, step =0.5)
+                smart_meter_ct_price = st.number_input("CT Sell Price €/pc. ", value = 20.0, step =0.5, label_visibility="hidden")
             if need_data_manager:
-                o_data_manager_price = st.number_input("D. Manager Sell Price €/pc.", value=data_manager_price_value, step=1.0)    
+                o_data_manager_price = st.number_input("D. Manager Sell Price €/pc.", value=data_manager_price_value, step=1.0, label_visibility="hidden")    
         for i in range(len(inverter_df)):
             if inverter_df['product_name'][i] == type_inverter:
                 inverter_power_resell = inverter_df['power'][i]  
             
         with c4:
             pv_price_resell = o_pv_price * resell
-            pv_price = st.text_input("Panels Unit Price", str(pv_price_resell),disabled= True)
+            pv_price = st.text_input("Unit Price", str(pv_price_resell),disabled= True)
             inverter_price_resell = round(o_inverter_price * resell * inverter_power_resell, 2)
-            inverter_price = st.text_input("Inverter Unit Price", inverter_price_resell,disabled= True)
+            inverter_price = st.text_input("Inverter Unit Price", inverter_price_resell,disabled= True, label_visibility="hidden")
             smart_meter_price_resell = round(o_smart_meter_price * resell, 2)
-            smart_meter_price = st.text_input("Meter Unit Price", smart_meter_price_resell,disabled= True) 
+            smart_meter_price = st.text_input("Meter Unit Price", smart_meter_price_resell,disabled= True, label_visibility="hidden") 
             if sm_connetion=="indirect":
                 sm_tc_price_resell = round(smart_meter_ct_price * resell, 2)
-                sm_tc_up = st.text_input("CT Unit Price", value=sm_tc_price_resell,disabled= True)
+                sm_tc_up = st.text_input("CT Unit Price", value=sm_tc_price_resell,disabled= True, label_visibility="hidden")
             data_manager_price_value_resell = round(o_data_manager_price * resell, 2)
             if need_data_manager:
-                data_manager_price = st.text_input("Data Manager Unit Price", data_manager_price_value_resell,disabled= True)
+                data_manager_price = st.text_input("Data Manager Unit Price", data_manager_price_value_resell,disabled= True, label_visibility="hidden")
         with c5:
             t_pv_total_value_resell = pv_price_resell * panels 
-            t_pv_price = st.text_input("Panels Total Price", t_pv_total_value_resell,disabled= True)
+            t_pv_price = st.text_input("Total Price", t_pv_total_value_resell,disabled= True)
             t_inverter_price_resell = round(inverter_price_resell * inverters,2)
-            t_inverter_price = st.text_input("Inverters Total Price", t_inverter_price_resell,disabled= True)
+            t_inverter_price = st.text_input("Inverters Total Price", t_inverter_price_resell,disabled= True, label_visibility="hidden")
             t_smart_meter_price_resell = round(smart_meter_price_resell * q_smart_meter,2)
-            t_smart_meter_price = st.text_input("Meter Total Price", t_smart_meter_price_resell,disabled= True)
+            t_smart_meter_price = st.text_input("Meter Total Price", t_smart_meter_price_resell,disabled= True, label_visibility="hidden")
             t_sm_tc_price_resell = round(smart_meter_ct_price * resell * sm_tc_qty , 2)
             if sm_connetion=="indirect":
-                sm_tc_tp = st.text_input("CT Total Price", value=t_sm_tc_price_resell,disabled= True)
+                sm_tc_tp = st.text_input("CT Total Price", value=t_sm_tc_price_resell,disabled= True, label_visibility="hidden")
             t_data_manager_price_value_resell = data_manager_price_value_resell * q_data_manager
             if need_data_manager:
-                t_data_manager_price = st.text_input("Data Manager Total Price", t_data_manager_price_value_resell,disabled= True)
+                t_data_manager_price = st.text_input("Data Manager Total Price", t_data_manager_price_value_resell,disabled= True, label_visibility="hidden")
         s1, = st.columns(1)
         total_cost_eq_value = float(t_data_manager_price) + float(t_inverter_price) + float(t_pv_price) + float(t_smart_meter_price) + t_sm_tc_price_resell
         with s1:
@@ -656,39 +656,39 @@ with st.expander("Project calculation parameters"):
             FTP_cable_type = st.selectbox("Choose FTP cable type", ("FTP 4x2x0.5", "FTP 4x2x0.85"))
             corrugated_tube_type = st.selectbox("Choose corrugated tube dimmension", ("16", "25", "32", "40"))
         with d2:
-            l_grounding= st.number_input("Grounding cable (m)", value=15.0, step=1.0)
-            l_inverter = st.number_input("Solar cable (m) ", value=25.0, step=1.0)
-            l_meter = st.number_input("Power cable (m)", value=30.0, step=1.0)
-            l_ftp_meter = st.number_input("FTP cable (m)", value=30.0, step=1.0)
-            l_corrugated_tube = st.number_input("Corrugated tube (m)", value=l_ftp_meter+l_meter+l_grounding + (l_inverter/2), step=0.1)
+            l_grounding= st.number_input("Qty.", value=15.0, step=1.0)
+            l_inverter = st.number_input("Solar cable (m) ", value=25.0, step=1.0, label_visibility="hidden")
+            l_meter = st.number_input("Power cable (m)", value=30.0, step=1.0, label_visibility="hidden")
+            l_ftp_meter = st.number_input("FTP cable (m)", value=30.0, step=1.0, label_visibility="hidden")
+            l_corrugated_tube = st.number_input("Corrugated tube (m)", value=l_ftp_meter+l_meter+l_grounding + (l_inverter/2), step=0.1, label_visibility="hidden")
         with d3:
-            ground_cable_price = st.number_input("Gr. cbl. Sell Price", value=3.0, step=0.1, key="ground_cable_price")
-            solar_cable_price = st.number_input("Solar Cable Sell Price", value=2.0, step=0.1)
-            power_cable_price = st.number_input("Power Cable Sell Price", value=cable_price_value, step=0.1)
-            ftp_cable_price = st.number_input("FTP Sell Price", value=1.0, step=0.1)
-            corrugated_tube_price = st.number_input("Corrugated Tube Sell Price", value=2.0, step=0.1)
+            ground_cable_price = st.number_input("Buy Price", value=3.0, step=0.1, key="ground_cable_price")
+            solar_cable_price = st.number_input("Solar Cable Sell Price", value=2.0, step=0.1, label_visibility="hidden")
+            power_cable_price = st.number_input("Power Cable Sell Price", value=cable_price_value, step=0.1, label_visibility="hidden")
+            ftp_cable_price = st.number_input("FTP Sell Price", value=1.0, step=0.1, label_visibility="hidden")
+            corrugated_tube_price = st.number_input("Corrugated Tube Sell Price", value=2.0, step=0.1, label_visibility="hidden")
         with d4:
             gr_price_unit = round(ground_cable_price* resell,2)
             solar_price_unit = solar_cable_price* resell
             power_price_unit = power_cable_price* resell
             ftp_price_unit = ftp_cable_price* resell
             corrugated_tube_price_unit = corrugated_tube_price* resell
-            gr_price = st.text_input("Gr. Cbl. Unit Price", gr_price_unit,disabled= True, key="gr_price")
-            solar_price = st.text_input("Solar Cable Unit Price", solar_price_unit,disabled= True)
-            power_price = st.text_input("Power Cable Unit Price", power_price_unit,disabled= True)
-            ftp_price = st.text_input("FTP Sell Price", ftp_price_unit,disabled= True)
-            cor_tube_price = st.text_input("Corrugated Tube Unit Price", corrugated_tube_price_unit,disabled= True)
+            gr_price = st.text_input("Unit Price", gr_price_unit,disabled= True, key="gr_price", label_visibility="hidden")
+            solar_price = st.text_input("Solar Cable Unit Price", solar_price_unit,disabled= True, label_visibility="hidden")
+            power_price = st.text_input("Power Cable Unit Price", power_price_unit,disabled= True, label_visibility="hidden")
+            ftp_price = st.text_input("FTP Sell Price", ftp_price_unit,disabled= True, label_visibility="hidden")
+            cor_tube_price = st.text_input("Corrugated Tube Unit Price", corrugated_tube_price_unit,disabled= True, label_visibility="hidden")
         with d5:
             t_gr_price_unit = round(ground_cable_price* resell*l_grounding,2)
             t_solar_price_unit = solar_cable_price* resell*l_inverter
             t_power_price_unit = power_cable_price* resell*l_meter
             t_ftp_price_unit = ftp_cable_price* resell*l_ftp_meter
             t_corrugated_tube_price_unit = corrugated_tube_price* resell*l_corrugated_tube
-            t_gr_price = st.text_input("Gr. Cbl. Total Price", t_gr_price_unit,disabled= True, key="t_gr_price")
-            t_solar_price = st.text_input("Solar Cable Total Price", t_solar_price_unit,disabled= True)
-            t_power_meter_price = st.text_input("Power Cable Total Price", t_power_price_unit,disabled= True)
-            t_ftp_price = st.text_input("FTP Total Price", t_ftp_price_unit,disabled= True)
-            t_corrugated_tube_price = st.text_input("Corrugated Tube Total Price", round(t_corrugated_tube_price_unit,2),disabled= True)
+            t_gr_price = st.text_input("Total Price", t_gr_price_unit,disabled= True, key="t_gr_price")
+            t_solar_price = st.text_input("Solar Cable Total Price", t_solar_price_unit,disabled= True, label_visibility="hidden")
+            t_power_meter_price = st.text_input("Power Cable Total Price", t_power_price_unit,disabled= True, label_visibility="hidden")
+            t_ftp_price = st.text_input("FTP Total Price", t_ftp_price_unit,disabled= True, label_visibility="hidden")
+            t_corrugated_tube_price = st.text_input("Corrugated Tube Total Price", round(t_corrugated_tube_price_unit,2),disabled= True, label_visibility="hidden")
         r1, = st.columns(1)
         total_cost_cables_value = float(t_gr_price) + float(t_solar_price) + float(t_power_meter_price) + float(t_ftp_price) + float(t_corrugated_tube_price)
         # add extra cables costs
@@ -817,7 +817,7 @@ with st.expander("Project calculation parameters"):
             AC_small_mat_type = st.text_input("Extra materials (€)", "Small material",  key= "AC_small_mat_type",disabled=True)
             
         with e2:
-            acbreaker_qty = st.number_input("Quantity", value=1,step=1)
+            acbreaker_qty = st.number_input("Qty.", value=1,step=1, key= "acbreaker_qty")
             ac_sm_breaker_qty = st.number_input("SMMCB qty(€)",value=1,step=1,label_visibility="hidden")
             if data_manager=="Panel Mounted Data Manager":
                 vdc_power_supply_qty = st.number_input("Charger sty (€)", value=1,step=1,label_visibility="hidden")
@@ -827,7 +827,7 @@ with st.expander("Project calculation parameters"):
             AC_small_mat_qty = st.number_input("Small material price (€)", value=1.0, step=1.0, key= "AC_small_mat_qty",  label_visibility="hidden")
         with e3:
             
-            acbreaker_price= st.number_input("Sell price", value=50.0,step=0.5, key="acbreaker_price")
+            acbreaker_price= st.number_input("Buy Price", value=50.0,step=0.5, key="acbreaker_price")
             ac_sm_breaker_price= st.number_input("ac_sm price (€)", value=6.0,step=0.5,label_visibility="hidden")
             if data_manager=="Panel Mounted Data Manager":
                 vdc_power_supply_price= st.number_input("ps (€)", value=25.0,step=0.5,label_visibility="hidden")
@@ -936,14 +936,14 @@ with st.expander("Project calculation parameters"):
             dc_electric_panel_type = st.selectbox("DC electric panel type", ("50x40x20", "60x60x20")) 
             small_material_type = st.text_input("Extra materials", "Small Material", disabled=True)
         with f2:
-            dcfuse_qty= st.number_input("Quantity", value=2*strings, step=1, key = "dcfuse_qty", disabled=True)
+            dcfuse_qty= st.number_input("Qty.", value=2*strings, step=1, key = "dcfuse_qty", disabled=True)
             dcfuse_slot_qty= st.number_input(" slotd price (€)", value=strings, step=1,label_visibility="hidden",disabled=True)
             discharger_qty = st.number_input("dischdarger price (€)", value=strings, step=1,label_visibility="hidden",disabled=True)
             connector_qty = st.number_input(" connedctor price (€)", value=15, step=1,label_visibility="hidden")
             dc_electric_panel_qty = st.number_input("DC eledctric panel(€)", value=1, step=1,label_visibility="hidden")
             small_mat_qty = st.number_input("Small material price (€)", value=1.0, step=1.0,label_visibility="hidden", key="small_mat_qty")
         with f3:
-            dcfuse_price= st.number_input("Sell price", value=5.0, step=0.5, key = "dcfuse_price")
+            dcfuse_price= st.number_input("Buy Price", value=5.0, step=0.5, key = "dcfuse_price")
             dcfuse_slot_price= st.number_input(" slot price (€)", value=7.5, step=0.5,label_visibility="hidden")
             discharger_price = st.number_input("discharger price (€)", value=100.0, step=5.0,label_visibility="hidden")
             connector_price = st.number_input(" connector price (€)", value=5.0, step=0.1,label_visibility="hidden")
@@ -955,7 +955,7 @@ with st.expander("Project calculation parameters"):
             discharger_uuprice = discharger_price*resell
             connector_uuprice = connector_price*resell
             dc_electric_panel_uuprice = dc_electric_panel_price*resell
-            dcfuse_uprice= st.text_input("Unit price", dcfuse_uuprice,  key = "dcfuse_uprice",disabled=True)
+            dcfuse_uprice= st.text_input("Unit Price", dcfuse_uuprice,  key = "dcfuse_uprice",disabled=True)
             dcfuse_slot_uprice= st.text_input(" slot uprice (€)", dcfuse_slot_uuprice, label_visibility="hidden",disabled=True)
             discharger_uprice = st.text_input("discharger uprice (€)", discharger_uuprice, label_visibility="hidden",disabled=True)
             connector_uprice = st.text_input("connector uprice (€)", connector_uuprice, label_visibility="hidden",disabled=True)
@@ -968,7 +968,7 @@ with st.expander("Project calculation parameters"):
             discharger_total_price = float(discharger_uprice) * discharger_qty
             connector_total_price = float(connector_uprice) * connector_qty
             dc_electric_panel_total_price = float(dc_electric_panel_uprice)*dc_electric_panel_qty
-            dcfuse_tprice= st.text_input("Total price", dcfuse_total_price,  key = "dcfuse_tprice",disabled=True)
+            dcfuse_tprice= st.text_input("Total Price", dcfuse_total_price,  key = "dcfuse_tprice",disabled=True)
             dcfuse_slot_tprice= st.text_input(" slot tprice (€)", dcfuse_slot_total_price, label_visibility="hidden",disabled=True)
             discharger_tprice = st.text_input("discharger tprice (€)",  discharger_total_price, label_visibility="hidden",disabled=True)
             connector_tprice = st.text_input(" connector tprice (€)", connector_total_price, label_visibility="hidden",disabled=True)
@@ -1013,35 +1013,35 @@ with st.expander("Project calculation parameters"):
                 small_material_gr_qty = st.number_input("Qty. (pcs)", value=1, step=1, key="small_material_gr_qty")
                 labor_gr_qty = st.number_input("Qty. (pcs)", value=1, step=1, key="labor_gr_qty")
         with f3:
-            measure_g_system = st.number_input("Price", value=100.0, step=10.0)
+            measure_g_system = st.number_input("Buy Price", value=100.0, step=10.0)
             if need_grounding_system:
-                platbanda_price= st.number_input("Buy price", value=2.0, step=0.5, key = "platbanda_price")
-                electrode_price= st.number_input("Buy price", value=9.0, step=0.5, key = "electrode_price")
-                separator_price= st.number_input("Buy price", value=12.0, step=0.5, key = "separator_price")
-                small_material_gr_price = st.number_input("Buy Price", value=100.0, step=10.0, key="small_material_gr_price")
-                labor_gr_price = st.number_input("Price", value=1100.0, step=10.0, key="labor_gr_price")
+                platbanda_price= st.number_input("Buy Price", value=2.0, step=0.5, key = "platbanda_price", label_visibility="hidden")
+                electrode_price= st.number_input("Buy Price", value=9.0, step=0.5, key = "electrode_price", label_visibility="hidden")
+                separator_price= st.number_input("Buy Price", value=12.0, step=0.5, key = "separator_price", label_visibility="hidden")
+                small_material_gr_price = st.number_input("Buy Price", value=100.0, step=10.0, key="small_material_gr_price", label_visibility="hidden")
+                labor_gr_price = st.number_input("Buy Price", value=1100.0, step=10.0, key="labor_gr_price", label_visibility="hidden")
         with f4:
-            measure_g_system_uprice = st.text_input("Unit price", value=round(measure_g_system*resell,2), disabled=True, label_visibility="hidden",key="measure_g_system_uprice")
+            measure_g_system_uprice = st.text_input("Unit Price", value=round(measure_g_system*resell,2), disabled=True, key="measure_g_system_uprice")
             if need_grounding_system:
                 platbanda_uuprice= round(platbanda_price*resell,2)
-                platbanda_uprice= st.text_input("Unit price", platbanda_uuprice,  key = "platbanda_uprice",disabled=True)
+                platbanda_uprice= st.text_input("Unit Price", platbanda_uuprice,  key = "platbanda_uprice",disabled=True, label_visibility="hidden")
                 electrode_uuprice= round(electrode_price*resell,2)
-                electrode_uprice= st.text_input("Unit price", electrode_uuprice,  key = "electrode_uprice",disabled=True)
+                electrode_uprice= st.text_input("Unit Price", electrode_uuprice,  key = "electrode_uprice",disabled=True, label_visibility="hidden")
                 separator_uuprice= round(separator_price*resell,2)
-                separator_uprice= st.text_input("Unit price", separator_uuprice,  key = "separator_uprice",disabled=True)
-                small_material_gr_uprice = st.text_input("Unit price", value=round(small_material_gr_price*resell,2), disabled=True, label_visibility="hidden",key="small_material_gr_uprice")
-                labor_gr_uprice = st.text_input("Unit price", value=round(labor_gr_price*resell,2), disabled=True, label_visibility="hidden",key="labor_gr_uprice")
+                separator_uprice= st.text_input("Unit Price", separator_uuprice,  key = "separator_uprice",disabled=True, label_visibility="hidden")
+                small_material_gr_uprice = st.text_input("Unit Price", value=round(small_material_gr_price*resell,2), disabled=True, label_visibility="hidden",key="small_material_gr_uprice")
+                labor_gr_uprice = st.text_input("Unit Price", value=round(labor_gr_price*resell,2), disabled=True, label_visibility="hidden",key="labor_gr_uprice")
         with f5:
-            measure_g_system_tprice = st.text_input("Total price", value=round(measure_g_system*resell*measure_qty,2), disabled=True, label_visibility="hidden",key="measure_g_system_tprice")
+            measure_g_system_tprice = st.text_input("Total Price", value=round(measure_g_system*resell*measure_qty,2), disabled=True, key="measure_g_system_tprice")
             if need_grounding_system:
                 platbanda_total_price = round(float(platbanda_uprice) * platbanda_qty,2)
-                platbanda_tprice= st.text_input("Total price", platbanda_total_price,  key = "platbanda_tprice",disabled=True)
+                platbanda_tprice= st.text_input("Total Price", platbanda_total_price,  key = "platbanda_tprice",disabled=True, label_visibility="hidden")
                 electrode_total_price = round(float(electrode_uprice) * electrode_qty,2)
-                electrode_tprice= st.text_input("Total price", electrode_total_price,  key = "electrode_tprice",disabled=True)
+                electrode_tprice= st.text_input("Total Price", electrode_total_price,  key = "electrode_tprice",disabled=True, label_visibility="hidden")
                 separator_total_price = round(separator_uuprice * separator_qty,2)
-                separator_tprice= st.text_input("Total price", separator_total_price,  key = "separator_tprice",disabled=True)
-                small_material_gr_tprice = st.text_input("Total price", value=round(small_material_gr_price*resell*small_material_gr_qty,2), disabled=True, label_visibility="hidden",key="small_material_gr_tprice")
-                labor_gr_tprice = st.text_input("Total price", value=round(labor_gr_price*resell*labor_gr_qty,2), disabled=True, label_visibility="hidden",key="labor_gr_tprice")
+                separator_tprice= st.text_input("Total Price", separator_total_price,  key = "separator_tprice",disabled=True, label_visibility="hidden")
+                small_material_gr_tprice = st.text_input("Total Price", value=round(small_material_gr_price*resell*small_material_gr_qty,2), disabled=True, label_visibility="hidden",key="small_material_gr_tprice")
+                labor_gr_tprice = st.text_input("Total Price", value=round(labor_gr_price*resell*labor_gr_qty,2), disabled=True, label_visibility="hidden",key="labor_gr_tprice")
             
         
         if need_grounding_system:
@@ -1329,35 +1329,35 @@ with st.expander("Project calculation parameters"):
                 if roofing_type == "Metal sheet":
                     sheet_mount_qty = st.number_input("Qty.", value=int(round(railholder_total,0)), step=1, key="sheet_mount_qty", label_visibility="hidden")
         with gf3:
-            pv_panel_mounts_price= st.number_input("Buy price (€)", value=mounts_price_value, step=1.0, key="pv_panel_mounts_price" )
+            pv_panel_mounts_price= st.number_input("Buy Price", value=mounts_price_value, step=1.0, key="pv_panel_mounts_price" )
             if roofing_type != "Flat":
-                end_clamp_price= st.number_input("Buy price (€)", value=2.0, step=0.5, key="end_clamp_price", label_visibility="hidden")
-                mid_clamp_price= st.number_input("Buy price (€)", value=2.0, step=0.5, key="mid_clamp_price" , label_visibility="hidden")
+                end_clamp_price= st.number_input("Buy Price", value=2.0, step=0.5, key="end_clamp_price", label_visibility="hidden")
+                mid_clamp_price= st.number_input("Buy Price", value=2.0, step=0.5, key="mid_clamp_price" , label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
                     if roofing_type == "Tiles":
-                        screw_price= st.number_input("Buy price (€)", value=7.5, step=0.1, key="screw_price", label_visibility="hidden")
+                        screw_price= st.number_input("Buy Price", value=7.5, step=0.1, key="screw_price", label_visibility="hidden")
                     else:
-                        screw_price= st.number_input("Buy price (€)", value=0.5, step=0.1, key="screw_price", label_visibility="hidden")
+                        screw_price= st.number_input("Buy Price", value=0.5, step=0.1, key="screw_price", label_visibility="hidden")
                     if roofing_type == "Metal sheet":
-                        sheet_mount_price = st.number_input("Buy price (€)", value=5.0, step=0.1, key="sheet_mount_price", label_visibility="hidden")
+                        sheet_mount_price = st.number_input("Buy Price", value=5.0, step=0.1, key="sheet_mount_price", label_visibility="hidden")
         with gf4:
-            mounts_uprice= st.text_input("Unit price (€)", value=pv_panel_mounts_price*resell, disabled=True, key = "mounts_uprice")
+            mounts_uprice= st.text_input("Unit Price", value=pv_panel_mounts_price*resell, disabled=True, key = "mounts_uprice")
             if roofing_type != "Flat":
-                end_clamp_uprice= st.text_input("Unit price (€)", value=end_clamp_price*resell, disabled=True, key = "end_clamp_uprice", label_visibility="hidden")
-                mid_clamp_uprice= st.text_input("Unit price (€)", value=mid_clamp_price*resell, disabled=True, key = "mid_clamp_uprice", label_visibility="hidden")
+                end_clamp_uprice= st.text_input("Unit Price", value=end_clamp_price*resell, disabled=True, key = "end_clamp_uprice", label_visibility="hidden")
+                mid_clamp_uprice= st.text_input("Unit Price", value=mid_clamp_price*resell, disabled=True, key = "mid_clamp_uprice", label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
-                    screw_uprice= st.text_input("Unit price (€)", value=screw_price*resell, disabled=True, key = "screw_uprice", label_visibility="hidden")
+                    screw_uprice= st.text_input("Unit Price", value=screw_price*resell, disabled=True, key = "screw_uprice", label_visibility="hidden")
                 if roofing_type == "Metal sheet":
-                    sheet_mount_uprice = st.text_input("Unit price (€)", value=sheet_mount_price*resell, disabled=True, key = "sheet_mount_uprice", label_visibility="hidden")
+                    sheet_mount_uprice = st.text_input("Unit Price", value=sheet_mount_price*resell, disabled=True, key = "sheet_mount_uprice", label_visibility="hidden")
         with gf5:
-            mounts_tprice= st.text_input("Total price", mounts_qty * pv_panel_mounts_price *resell,  key = "mounts_tprice",disabled=True)
+            mounts_tprice= st.text_input("Total Price", mounts_qty * pv_panel_mounts_price *resell,  key = "mounts_tprice",disabled=True)
             if roofing_type != "Flat":
-                end_clamp_tprice= st.text_input("Total price", round(end_clamp_qty * end_clamp_price *resell,2),  key = "end_clamp_tprice",disabled=True, label_visibility="hidden")
-                mid_clamp_tprice= st.text_input("Total price", round(mid_clamp_qty * mid_clamp_price *resell,2),  key = "mid_clamp_tprice",disabled=True, label_visibility="hidden")
+                end_clamp_tprice= st.text_input("Total Price", round(end_clamp_qty * end_clamp_price *resell,2),  key = "end_clamp_tprice",disabled=True, label_visibility="hidden")
+                mid_clamp_tprice= st.text_input("Total Price", round(mid_clamp_qty * mid_clamp_price *resell,2),  key = "mid_clamp_tprice",disabled=True, label_visibility="hidden")
                 if roofing_type != "Metal sandwich" :
-                    screw_tprice= st.text_input("Total price", round(screw_qty * screw_price *resell,2),  key = "screw_tprice",disabled=True, label_visibility="hidden")
+                    screw_tprice= st.text_input("Total Price", round(screw_qty * screw_price *resell,2),  key = "screw_tprice",disabled=True, label_visibility="hidden")
                 if roofing_type == "Metal sheet":
-                    sheet_mount_tprice = st.text_input("Total price", round(sheet_mount_qty * sheet_mount_price *resell,2),  key = "sheet_mount_tprice",disabled=True, label_visibility="hidden")
+                    sheet_mount_tprice = st.text_input("Total Price", round(sheet_mount_qty * sheet_mount_price *resell,2),  key = "sheet_mount_tprice",disabled=True, label_visibility="hidden")
         tt1, = st.columns(1)
         total_cost_mounts_value =float(sheet_mount_tprice)+ mounts_qty * pv_panel_mounts_price *resell + end_clamp_qty * end_clamp_price *resell + mid_clamp_qty * mid_clamp_price *resell + screw_qty * screw_price *resell
         with tt1:
@@ -1388,11 +1388,11 @@ with st.expander("Project calculation parameters"):
         with odc2:
             other_material_qty = st.number_input("Qty.", value=1, step=1, key="other_material_qty")
         with odc3:    
-            other_mat_price = st.number_input("Other materials costs (€)", value=other_mat_value, step=10.0, help="300 EUR for 30kWp or less, 600 EUR for more than 30kWp")
+            other_mat_price = st.number_input("Buy Price", value=other_mat_value, step=10.0, help="300 EUR for 30kWp or less, 600 EUR for more than 30kWp")
         with odc4:
-            other_mat_uprice = st.text_input("Unit price (€)", value=other_mat_price*resell, disabled=True,   key = "other_mat_uprice")
+            other_mat_uprice = st.text_input("Unit Price", value=other_mat_price*resell, disabled=True,   key = "other_mat_uprice")
         with odc5:
-            other_mat_tprice = st.text_input("Total price", other_material_qty * other_mat_price *resell,   key = "other_mat_tprice",disabled=True)
+            other_mat_tprice = st.text_input("Total Price", other_material_qty * other_mat_price *resell,   key = "other_mat_tprice",disabled=True)
         
         u1, = st.columns(1)
         total_cost_oth_value = other_mat_price*resell*other_material_qty
