@@ -109,3 +109,33 @@ background-color: #4e4e4e;
     color: rgb(255 255 255)!important;
 }
 
+.st-eq {
+    -webkit-text-fill-color: inherit;
+    color: inherit;
+}
+.st-eo {
+    color: inherit;
+}
+.st-jn {
+    color: inherit;
+}
+
+.st-jm {
+    color: inherit;
+}
+.st-je {
+    -webkit-text-fill-color: inherit;
+}
+
+
+.st-jd {
+    color: inherit;
+}
+
+.st-jh {
+    -webkit-text-fill-color:inherit;
+}
+
+.st-jg {
+    color:inherit;
+}
