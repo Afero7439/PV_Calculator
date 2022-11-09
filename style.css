@@ -141,6 +141,7 @@ background-color: #4e4e4e;
 
 .st-eo {
     color:inherit;
+    -webkit-text-fill-color: inherit;
 }
 
 .st-jj {
@@ -180,3 +181,17 @@ background-color: #4e4e4e;
 .st-j6 {
     color: inherit;
 }
+
+.st-i1 {
+    -webkit-text-fill-color:inherit;
+}
+
+
+.st-i0 {
+    color: inherit;
+}
+
+.st-jc {
+    -webkit-text-fill-color:inherit;
+}
+
