@@ -1543,6 +1543,18 @@ if need_data_manager:
 #sidebar
 navbar = st.sidebar
 navbar.image("logo.png", width=150)
+
+navbar.title("Load project")
+navbar.write("Use the selector below to load a project")
+uploaded_file = st.sidebar.file_uploader("Choose a file", type="pvf")
+load=navbar.button("Load project")
+
+if load:
+    if uploaded_file is not None:
+        navbar.success ("File uploaded successfully!")
+        
+
+
 navbar.title("Add Equipment")
 navbar.write("Add equipment to your design to better fit your project needs.")
 
@@ -1644,6 +1656,7 @@ checkbox = st.checkbox("Print to PDF when calculating!")
     
 #calculate costs
 calculate = st.button ("Calculate costs")
+save_project = st.button ("Save project")
 st_expander1=st.expander("Calculation results")
 
 
