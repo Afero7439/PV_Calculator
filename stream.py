@@ -404,7 +404,7 @@ with st.expander("Project calculation parameters"):
     with tab2:
          
         st.subheader("Equipment selection")
-        need_data_manager = st.checkbox("Do you need a data manager?")
+        need_data_manager = st.checkbox("Do you need a data manager?", key="need_data_manager", value=False, )
         c1,c2,c3,c4,c5 = st.columns([2.5,1,1,1,1])
         with c1:
             type_panels = st.selectbox("Choose panel type", (panouri_stoc), key="type_panels")
