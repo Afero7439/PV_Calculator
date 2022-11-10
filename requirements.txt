@@ -4,3 +4,4 @@ fpdf==1.7.2
 fpdf2==2.5.7
 mysql-connector-python==8.0.31
 protobuf==3.20.1
+deta==1.1.0
