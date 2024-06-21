@@ -2,8 +2,8 @@
 from re import X
 import streamlit as st
 import pandas as pd
-from fpdf import FPDF
-from fpdf import XPos, YPos
+from fpdf import FPDF, XPos, YPos
+#from fpdf.enums import XPos, YPos
 import os.path
 import base64
 import itertools
