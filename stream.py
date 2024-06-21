@@ -3,7 +3,7 @@ from re import X
 import streamlit as st
 import pandas as pd
 from fpdf import FPDF
-from fpdf.enums import XPos, YPos
+from fpdf import XPos, YPos
 import os.path
 import base64
 import itertools
